@@ -11,9 +11,10 @@
     <style>
         :root {
             --bg-space: #0b0f19;
-            --panel-bg: rgba(22, 30, 49, 0.85);
-            --accent-gold: #f59e0b;
-            --accent-neon: #10b981;
+            --panel-bg: rgba(17, 24, 39, 0.95);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-neon: #34d399;
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
             --danger: #ef4444;
@@ -29,11 +30,10 @@
         body {
             background-color: var(--bg-space);
             background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
+                radial-gradient(#1e293b 1px, transparent 1px),
+                radial-gradient(#1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
             color: var(--text-light);
             min-height: 100vh;
             display: flex;
@@ -47,11 +47,11 @@
             width: 100%;
             max-width: 1000px;
             background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            border: 2px solid rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(56, 189, 248, 0.2);
             border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             text-align: center;
             position: relative;
         }
@@ -59,11 +59,11 @@
         h1 {
             font-size: 2.5rem;
             font-weight: 800;
-            color: var(--accent-gold);
+            color: var(--accent-cyan);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 10px;
-            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
         }
 
         .subtitle {
@@ -86,7 +86,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Елементи керування та форми */
         .form-group {
             margin-bottom: 25px;
         }
@@ -113,8 +112,8 @@
         }
 
         select:focus, input[type="text"]:focus {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
         }
 
         .team-input-list, .players-input-list {
@@ -126,7 +125,7 @@
             max-height: 300px;
             overflow-y: auto;
             padding: 10px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
             border-radius: 12px;
         }
 
@@ -138,8 +137,8 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, var(--accent-gold), #d97706);
-            color: #000;
+            background: linear-gradient(135deg, var(--accent-cyan), #1d4ed8);
+            color: white;
             font-weight: 700;
             padding: 14px 35px;
             border: none;
@@ -149,13 +148,13 @@
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
             margin: 5px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
         }
 
         .btn-secondary {
@@ -170,12 +169,11 @@
             padding: 12px 20px;
         }
 
-        /* Ігровий інтерфейс */
         .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #1e293b;
+            border-bottom: 2px solid #334155;
             padding-bottom: 15px;
             margin-bottom: 25px;
             gap: 15px;
@@ -184,7 +182,7 @@
         .round-indicator {
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--accent-gold);
+            color: var(--accent-cyan);
         }
 
         .difficulty-badge {
@@ -211,12 +209,23 @@
             font-weight: 700;
         }
 
+        .voting-status-box {
+            background: #1e293b;
+            border: 1px dashed var(--accent-gold);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
         .question-box {
-            background: #111827;
+            background: #0f172a;
             padding: 30px;
             border-radius: 16px;
             margin-bottom: 30px;
-            border-left: 6px solid var(--accent-gold);
+            border-left: 6px solid var(--accent-cyan);
             text-align: left;
         }
 
@@ -262,8 +271,9 @@
         }
 
         .option-btn:hover:not(:disabled) {
-            background: #2563eb;
-            border-color: #3b82f6;
+            background: #38bdf8;
+            border-color: #0284c7;
+            color: #0f172a;
             transform: scale(1.02);
         }
 
@@ -280,16 +290,16 @@
         .option-btn.wrong {
             background: var(--danger) !important;
             border-color: #b91c1c !important;
+            color: white !important;
         }
 
-        /* Табло рахунку під час гри */
         .scoreboard-inline {
             display: flex;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
             margin-top: 35px;
-            background: #111827;
+            background: #0f172a;
             padding: 15px;
             border-radius: 12px;
         }
@@ -303,11 +313,10 @@
         }
 
         .score-pill.active-turn {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
         }
 
-        /* Екран фіналу та П'єдестал */
         .podium-container {
             display: flex;
             justify-content: center;
@@ -353,15 +362,14 @@
             margin-bottom: 5px;
         }
 
-        /* Стилі для місць */
         .place-1 .podium-block { background: linear-gradient(to top, #b45309, #f59e0b); height: 180px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
-        .place-2 .podium-block { background: linear-gradient(to top, #64748b, #cbd5e1); height: 130px; }
+        .place-2 .podium-block { background: linear-gradient(to top, #334155, #94a3b8); height: 130px; color: white; }
         .place-3 .podium-block { background: linear-gradient(to top, #78350f, #b45309); height: 90px; }
         .place-4 .podium-block { background: linear-gradient(to top, #1e293b, #475569); height: 60px; color: white; }
-        .place-5 .podium-block { background: linear-gradient(to top, #111827, #334155); height: 40px; color: white; }
+        .place-5 .podium-block { background: linear-gradient(to top, #0b0f19, #1e293b); height: 40px; color: white; }
 
         .wishes {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--accent-neon);
             font-weight: 700;
             margin-top: 30px;
@@ -373,7 +381,7 @@
 
 <div class="container">
     <h1>Що? Де? Коли?</h1>
-    <div class="subtitle">Інтелектуальна гра з Інформатики | 7 Клас</div>
+    <div class="subtitle">Інтелектуальне змагання з інформатики | 7 Клас</div>
 
     <div id="screen-players-setup" class="screen active">
         <div class="form-group">
@@ -408,17 +416,24 @@
                 <div id="round-num" class="round-indicator">Раунд 1 із 12</div>
                 <div id="difficulty-indicator" class="difficulty-badge diff-easy">Легкий</div>
             </div>
-            <div class="current-team-badge">Відповідає команда: <span id="current-team-display">Команда</span><br><small style="color:var(--text-muted)">Черга учасника: <span id="current-player-display" style="color:var(--accent-gold)">Учень</span></small></div>
+            <div class="current-team-badge">
+                Відповідає команда: <span id="current-team-display">Команда</span><br>
+                <small style="color:var(--text-muted)">Введення відповіді: <span id="current-player-display" style="color:var(--accent-gold)">Учень</span></small>
+            </div>
+        </div>
+
+        <div id="voting-banner" class="voting-status-box">
+            Крок опитування учасників команди...
         </div>
 
         <div class="question-box">
-            <div id="q-topic" class="question-topic">Тема теми</div>
+            <div id="q-topic" class="question-topic">Тема</div>
             <div id="q-text" class="question-text">Текст запитання?</div>
         </div>
 
         <div id="options-container" class="options-grid"></div>
 
-        <button id="next-btn" class="btn" style="display: none;" onclick="nextStep()">Наступне запитання</button>
+        <button id="next-btn" class="btn" style="display: none;" onclick="nextStep()">Наступна команда / Раунд</button>
 
         <div id="scoreboard" class="scoreboard-inline"></div>
     </div>
@@ -427,7 +442,7 @@
         <h2 id="final-title">Фінал гри! Вітаємо переможців!</h2>
         <div id="podium" class="podium-container"></div>
         <div class="wishes">
-            Успіхів у подальшому вивченні захопливого світу інформатики! <br>🚀 Ви — справжні знавці 2026 року! 🚀
+            Вітаємо з успішним освоєнням технологій та графічного коду! <br>🚀 Ви — майбутні архітектори цифрового світу! 🚀
         </div>
         <div style="margin-top: 30px;">
             <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white;" onclick="downloadGeneralReportPDF()">Загальний звіт (PDF)</button>
@@ -437,63 +452,52 @@
 </div>
 
 <script>
-    // БАЗА З ЗАПИТАННЯМИ, РОЗДІЛЕНА ЗА РІВНЯМИ СКЛАДНОСТІ
     const questionsDatabase = {
         easy: [
-            { topic: "Персональний цифровий простір", q: "Що є основою вашого персонального цифрового простору?", a: ["Набір хмарних сервісів, пристроїв та даних", "Лише ваш шкільний щоденник", "Будь-який комп'ютер у кав'ярні"], correct: 0 },
-            { topic: "Правила безпечного користування", q: "Яке правило є найважливішим при завантаженні файлів з інтернету?", a: ["Перевіряти надійність джерела та сканувати антивірусом", "Завантажувати найшвидше", "Дивитися тільки на красиву картинку сайту"], correct: 0 },
-            { topic: "Цифрова безпека. Захист даних", q: "Який пароль вважається найнадійнішим?", a: ["Комбінація літер різних регістрів, цифр і символів", "12345678", "Твоє ім'я та рік народження"], correct: 0 },
-            { topic: "Цифрова безпека. Комп'ютерні віруси", q: "Які програми створені для виявлення та блокування шкідливого софту?", a: ["Мультимедійні програвачі", "Антивіруси", "Браузери"], correct: 1 },
-            { topic: "Сервери та файлові сховища", q: "Яка головна функція файлового сервера?", a: ["Створення презентацій", "Зберігання файлів та забезпечення доступу до них у мережі", "Редагування відеофайлів"], correct: 1 },
-            { topic: "Цифрове середовище та ІТ", q: "Що таке 'хмарні технології'?", a: ["Програми для прогнозу погоди", "Технології обробки даних на віддалених серверах", "Комп'ютери, що працюють високо в горах"], correct: 1 }
+            { id: "e1", topic: "Персональний цифровий простір", q: "Який із перелічених паролів є найнадійнішим для захисту вашого облікового запису?", a: ["D1n0saur_2026!", "12345678", "andriy2013"], correct: 0 },
+            { id: "e2", topic: "Цифрове середовище та інформаційні технології", q: "Де фізично зберігаються файли користувача, коли він завантажує їх у хмару?", a: ["На спеціальних віддалених серверах дата-центрів", "Усередині повітряного кабелю провайдера", "Безпосередньо на екрані монітора"], correct: 0 },
+            { id: "e3", topic: "Цифрова безпека. Комп'ютерні віруси", q: "Яка програма розроблена спеціально для виявлення, ізоляції та видалення шкідливого ПЗ з комп'ютера?", a: ["Антивірус", "Браузер", "Провідник файлів"], correct: 0 },
+            { id: "e4", topic: "Працюємо онлайн (Google Диск)", q: "Яка кнопка на Google Диску дозволяє надати другу доступ до вашої презентації для спільного редагування?", a: ["Поділитися (Налаштування доступу)", "Завантажити файл", "Створити копію"], correct: 0 },
+            { id: "e5", topic: "Працюємо онлайн (WhatsApp)", q: "Яка функція в месенджерах забезпечує те, що ваше приватне повідомлення можете прочитати лише ви та ваш співрозмовник?", a: ["Наскрізне шифрування (End-to-end encryption)", "Автокорекція тексту", "Хмарний статус'], correct: 0 },
+            { id: "e6", topic: "Тексти та публікації", q: "Для чого використовують готові стилі оформлення (наприклад, Заголовок 1) під час форматування великих текстових документів?", a: ["Для швидкого одноманітного оформлення структури та автостворення змісту", "Щоб приховати граматичні помилки", "Щоб документ займав менше місця"], correct: 0 }
         ],
         medium: [
-            { topic: "Працюємо онлайн (OneDrive)", q: "До екосистеми якої компанії належить хмарне сховище OneDrive?", a: ["Apple", "Google", "Microsoft"], correct: 2 },
-            { topic: "Працюємо онлайн (Google Диск)", q: "Яку максимальну кількість людей можна додати до редагування одного документа Google?", a: ["Лише 5 людей", "Багатьох користувачів за посиланням або емейлом", "Тільки автора документа"], correct: 1 },
-            { topic: "Цифрове середовище для навчання", q: "Який сервіс найкраще підходить для організації спільної роботи класу над проєктом?", a: ["Калькулятор", "Хмарне середовище (напр., Google Workspace)", "Стандартний Блокнот"], correct: 1 },
-            { topic: "Працюємо онлайн (WhatsApp)", q: "Яка функція в месенджерах забезпечує таємність листування від сторонніх осіб?", a: ["Наскрізне шифрування (End-to-end)", "Додавання стікерів", "Голосові повідомлення"], correct: 0 },
-            { topic: "Візуальний контент", q: "Який формат зображення підтримує прозорість фону?", a: ["JPEG", "PNG", "BMP"], correct: 1 },
-            { topic: "Конструктор вебсайтів", q: "Що таке 'макет сайту'?", a: ["Готовий програмний код", "Схема розташування елементів (заголовок, меню, контент)", "Текст, написаний для головної сторінки"], correct: 1 },
-            { topic: "Конструктор вебсайтів", q: "Чому важливо стискати великі зображення перед завантаженням на сайт?", a: ["Щоб сайт завантажувався швидше", "Щоб картинка стала чорно-білою", "Це необов'язково, конструктор сам усе видалить"], correct: 0 },
-            { topic: "Конструктор вебсайтів", q: "Як називається головне вікно навігації по сторінках сайту?", a: ["Підвал (Footer)", "Menu saytu (Navigation bar)", "Банер"], correct: 1 },
-            { topic: "Публікація вебсайту", q: "Що відбувається після натискання кнопки 'Опублікувати' в конструкторі сайтів?", a: ["Сайт видаляється", "Сайт стає доступним для користувачів в інтернеєті", "Сайт зберігається як документ Word"], correct: 1 },
-            { topic: "Як ШІ допомагає у контенті", q: "Що з переліченого є етичним використанням штучного інтелекту?", a: ["Видавати згенерований ШІ текст за власну наукову роботу", "Використовувати ШІ для пошуку ідей та структурування інформації", "Створювати фейкові новини з підробленими фото"], correct: 1 },
-            { topic: "Тексти та публікації", q: "Що таке комп'ютерна публікація?", a: ["Процес видання тексту на папері або в електронному вигляді", "Перегляд відео на YouTube", "Надсилання повідомлення другові"], correct: 0 },
-            { topic: "Вигляд документа та оформлення", q: "Яке головне правило підбору шрифтів для презентації або публікації?", a: ["Використовувати якомога більше різних шрифтів на одному слайді", "Використовувати не більше 2-3 шрифтів, які добре читаються", "Шрифт обов'язково має бути рукописним"], correct: 1 },
-            { topic: "Форматування текстових документів", q: "Для чого використовуються Елементи Стилів (Заголовок 1, 2) в тексті?", a: ["Для автоматичного створення змісту та швидкого форматування", "Тільки для зміни кольору літер", "Для перевірки орфографії"], correct: 0 },
-            { topic: "Злиття текстових документів", q: "Для чого використовують функцію злиття документів (Mail Merge)?", a: ["Для об'єднання кількох баз даних", "Для масового створення персоналізованих листів чи сертифікатів", "Для видалення вірусів з тексту"], correct: 1 },
-            { topic: "Публікації для соціальних мереж", q: "Яке співвідношення сторін є стандартним для контенту типу Stories або Reels?", a: ["4:3", "16:9 (Горизонтальне)", "9:16 (Вертикальне)"], correct: 2 },
-            { topic: "Засоби для перекладу текстів", q: "Яка технологія лежить в основі сучасних якісних онлайн-перекладачів?", a: ["Нейронні мережі", "Простий послівний словник", "Механічний переклад"], correct: 0 }
+            { id: "m1", topic: "Правила безпечного користування технологіями", q: "Вам прийшло повідомлення з незнайомого номера з посиланням: 'Ти виграв приз, перейди та введи свій пароль'. Як називається такий вид кібератаки?", a: ["Фішинг", "Спам-флуд", "Вірус-троян"], correct: 0 },
+            { id: "m2", topic: "Сервери та файлові сховища", q: "Як називається послуга, що надає користувачам місце на сервері для зберігання файлів з можливістю доступу через Інтернет з будь-якого пристрою?", a: ["Хмарне сховище", "Локальний диск C:", "Пакет архіватора"], correct: 0 },
+            { id: "m3", topic: "Працюємо онлайн (OneDrive)", q: "Під час роботи з документами у Word Online (OneDrive), куди зберігаються ваші зміни, коли ви вводите текст?", a: ["Автоматично зберігаються у хмару в режимі реального часу", "Нікуди, потрібно щохвилини тиснути Ctrl + S", "У буфер обміну вашого телефона"], correct: 0 },
+            { id: "m4", topic: "Конструктор вебсайтів (Макет та планування)", q: "Як називається схематичне креслення або ескіз вебсторінки, що показує розташування блоків інтерфейсу без детального дизайну?", a: ["Вайрфрейм (Wireframe)", "Брендбук", "HTML-код"], correct: 0 },
+            { id: "m5", topic: "Конструктор вебсайтів (Робота з текстом)", q: "Яке розширення або оптимізацію файлів зображень слід обрати перед додаванням на сайт, щоб сторінка завантажувалася швидше?", a: ["Зменшити роздільну здатність та стиснути формат (наприклад, у WebP чи JPG)", "Конвертувати картинку у формат високої якості TIFF", "Залишити важкий вихідний файл RAW без змін"], correct: 0 },
+            { id: "m6", topic: "Публікація вебсайту", q: "Що відбувається в момент натискання кнопки 'Опублікувати' в онлайн-конструкторі сайтів (наприклад, Google Сайти)?", a: ["Сайт стає доступним усім користувачам інтернету за унікальною адресою", "Сайт видаляється та переміщується в кошик", "Сайт завантажується на комп'ютер у вигляді текстового документа"], correct: 0 },
+            { id: "m7", topic: "Етика штучного інтелекту", q: "Якщо ви згенерували статтю за допомогою ШІ та видали її за власний повністю написаний текст, яке етичне правило ви порушили?", a: ["Академічну доброчесність (плагіат)", "Мережевий етикет спілкування", "Конфіденційність даних"], correct: 0 },
+            { id: "m8", topic: "Злиття текстових документів", q: "Навіщо в текстових процесорах використовують функцію злиття документів (Mail Merge)?", a: ["Для масового створення персоналізованих листів чи дипломів на основі списку імен", "Щоб об'єднати дві випадкові картинки в одну публікацію", "Для автоматичного перекладу тексту кількома мовами одночасно"], correct: 0 },
+            { id: "m9", topic: "Засоби для перекладу текстів", q: "Яка технологія лежить в основі сучасних онлайн-перекладачів (як-от Google Translate), що дозволяє їм враховувати контекст речення?", a: ["Штучні нейронні мережі", "Простий словниковий пошук поодиноких слів", "Звичайне сортування за алфавітом"], correct: 0 },
+            { id: "m10", topic: "Графічне програмування (Координати)", q: "У якій точці графічного вікна Scratch або Python (Turtle) розташована координата (0, 0) за замовчуванням?", a: ["У самому центрі полотна", "У лівому верхньому кутку", "У правому нижньому кутку"], correct: 0 },
+            { id: "m11", topic: "Графічне програмування (Узори)", q: "Яку алгоритмічну конструкцію обов'язково слід використати для циклічного повторення та ефективного малювання складного узору чи орнаменту?", a: ["Цикл (повторення)", "Розгалуження (умову if)", "Змінну рядкового типу"], correct: 0 },
+            { id: "m12", topic: "Культура відеоконтенту", q: "Що є ключовим правилом під час критичного оцінювання відеороликів в інтернеті, щоб не стати жертвою фейків?", a: ["Перевіряти першоджерело інформації, факти та наявність маніпуляцій", "Вірити автору, якщо у відео багато лайків та коментарів", "Оцінювати якість камери та професійний монтаж"], correct: 0 }
         ],
         hard: [
-            { topic: "Графічне програмування", q: "Яка точка на графічному полотні зазвичай має координати (0,0)?", a: ["Центр екрана", "Лівий верхній кут", "Правий нижній кут"], correct: 1 },
-            { topic: "Графічне програмування", q: "Якщо мы збільшуємо координату Y в комп'ютерній графіці, куди рухається об'єкт?", a: ["Вгору", "Вліво", "Вниз"], correct: 2 },
-            { topic: "Монстри (Програмування)", q: "Як у коді реалізувати випадковий вигляд або колір для малювання робота/монстра?", a: ["Функцією random()", "За допомогою клавіатури", "Колір завжди фіксований"], correct: 0 },
-            { topic: "Абстракціонізм", q: "Які інструменти коду потрібні для відтворення геометричних абстракцій?", a: ["Функції малювання фігур (rect, ellipse, line)", "Лише текстові оператори", "Програми архівації"], correct: 0 },
-            { topic: "Креативне умеблювання кімнати", q: "Який математичний принцип допомагає правильно масштабувати об'єкти на екрані?", a: ["Пропорція", "Додавання одиниці", "Теорема Вієта"], correct: 0 },
-            { topic: "Узори. Ефективне малювання", q: "Яку конструкцію коду доцільно використати для створення узору, що повторюється?", a: ["Умовний оператор if", "Цикл (наприклад, for або while)", "Змінну типу String"], correct: 1 },
-            { topic: "Події в програмуванні", q: "Прикладом якої події є клік по кнопці або натискання клавіші?", a: ["Подія користувача (Event)", "Помилка компілятора", "Оновлення сторінки"], correct: 0 },
-            { topic: "Рухомі м'ячики. Приборкуємо хаос", q: "Що потрібно змінювати в циклі, щоб м'ячик рухався по екрану?", a: ["Колір фону", "Його координати X та Y", "Розмір екрана"], correct: 1 },
-            { topic: "Функціональні перехрестя", q: "Який оператор допомагає перевірити, чи зіштовхнулися два рухомі об'єкти?", a: ["Оператор порівняння в умовному розгалуженні (if)", "Оператор введення", "Функція очищення екрана"], correct: 0 },
-            { topic: "Числа, цифри, фігури", q: "Яка математична константа використовується для розрахунку параметрів кіл та куль?", a: ["Число Пі", "Нуль", "Число Ейлера"], correct: 0 },
-            { topic: "Інноваційне писанкарство", q: "За допомогою чого можна запрограмувати складні симетричні орнаменти?", a: ["Математичних функцій синуса/косинуса та поворотів", "Звичайного копіювання коду 100 разів", "Текстових інструкцій"], correct: 0 },
-            { topic: "Медіа-дизайн", q: "Що таке кодек?", a: ["Програма для стиснення та відновлення відео/аудіо даних", "Відеокамера", "Спеціальний кабель для монітора"], correct: 0 },
-            { topic: "Кодування аудіо та відео даних", q: "Який із перелічених файлів є популярним медіаконтейнером для відео?", a: ["MP3", "MP4", "TXT"], correct: 1 },
-            { topic: "Моушн дизайн", q: "Що є головною особливістю моушн-дизайну?", a: ["Це суто статична графіка", "Це оживлення графіки за допомогою анімації", "Це робота виключно зі звуком"], correct: 1 },
-            { topic: "Відеохостинг", q: "Яка платформа є найпопулярнішим відеохостингом у світі?", a: ["Wikipedia", "YouTube", "Google Пошук"], correct: 1 },
-            { topic: "Власний цифровий відео-образ", q: "Яке правило безпеки є найважливішим при створенні власного блогу чи відео-образу?", a: ["Не публікувати конфіденційні дані (адресу, школу, документи)", "Знімати відео тільки вночі", "Використовувати найдорожчу камеру"], correct: 0 }
+            { id: "h1", topic: "Конструктор вебсайтів (Упорядкування сторінок)", q: "Як називається головне навігаційне меню сайту, що відображає ієрархію сторінок та допомагає користувачеві орієнтуватися в структурі?", a: ["Мапа сайту (або меню навігації)", "Сайдбар віджетів", "Підвал сайту (Footer)"], correct: 0 },
+            { id: "h2", topic: "Генерація контенту за допомогою ШІ", q: "Як називається спеціальний текстовий запит-інструкція, який користувач пише для нейромережі, щоб отримати якісний результат генерації контенту?", a: ["Промпт (Prompt)", "Тег (Tag)", "Скрипт (Script)"], correct: 0 },
+            { id: "h3", topic: "Вигляд документа. Принципи оформлення", q: "Яке правило дизайну публікацій для соцмереж стверджує, що не варто використовувати більше 2-3 різних шрифтів в одному макеті?", a: ["Принцип єдності стилю та типографіки", "Принцип хаотичної композиції", "Правило золотого перерізу"], correct: 0 },
+            { id: "h4", topic: "Графічне програмування (Події)", q: "Що в програмуванні називають 'подією' (Event)?", a: ["Дія, яка розпізнається програмою (наприклад, клік миші або натискання клавіші) для запуску блоку коду", "Процес компіляції коду в машинний файл", "Створення нової змінної в пам'яті"], correct: 0 },
+            { id: "h5", topic: "Рухомі м'ячики. Приборкуємо хаос", q: "За допомогою якої математичної операції або функції можна задати випадковий рух та хаотичний початковий напрямок для багатьох об'єктів на екрані?", a: ["Генератор випадкових чисел (random)", "Множення на постійне число Пi", "Округлення до цілого значення"], correct: 0 },
+            { id: "h6", topic: "Кодування аудіо та відео даних", q: "Що таке 'кодек' (Codec) у контексті роботи з медіафайлами?", a: ["Програма або алгоритм для стиснення (кодування) та відтворення (декодування) цифрового відео чи звуку", "Платформа для публікації відеоблогів", "Спеціальний кабель для підключення мікрофона"], correct: 0 },
+            { id: "h7", topic: "Моушн дизайн", q: "Яке головне завдання моушн-дизайну (Motion graphics) на відміну від звичайної статичної графіки?", a: ["Оживлення інтерфейсу за допомогою анімації, динамічного тексту та графіки в русі", "Друк зображень на плакатах великого формату", "Збереження картинок виключно в чорно-білих кольорах"], correct: 0 },
+            { id: "h8", topic: "Власний цифровий відео-образ", q: "Який елемент цифрового сліду найбільше впливає на формування вашої позитивної онлайн-репутації під час публікації авторських відео?", a: ["Повага до авторських прав, якісний контент та дотримання правил спільноти", "Велика кількість підписників, куплених через рекламу", "Використання масок, що повністю приховують обличчя"], correct: 0 }
         ]
     };
 
-    let gameQuestions = [];
     let teams = [];
-    let allPlayersGlobal = [];
-    let currentQuestionIndex = 0;
+    let currentGameRound = 1;
     let currentTeamIndex = 0;
-    let currentPlayerIndexInTeam = 0; 
-    let currentQuestionVotes = {}; 
+    let voterIndexInTeam = 0;
+
     let currentAnswersMapping = [];
-    const totalRounds = 12;
+    let selectedGlobalQuestion = null;
+    const maxGameRounds = 12;
+    let usedQuestionsIds = [];
+
+    let temporaryPlayerChoices = []; 
 
     function addPlayerField() {
         const container = document.getElementById('players-inputs-container');
@@ -520,8 +524,6 @@
             return;
         }
 
-        allPlayersGlobal = players;
-
         const teamsCount = parseInt(document.getElementById('teams-count-select').value);
         
         teams = [];
@@ -529,14 +531,12 @@
             teams.push({ name: `Команда ${i}`, score: 0, players: [] });
         }
 
-        // Рандомний розподіл лише реальних введених учасників
         let shuffledPlayers = [...players].sort(() => 0.5 - Math.random());
         shuffledPlayers.forEach((player, idx) => {
             let teamIdx = idx % teamsCount;
             teams[teamIdx].players.push(player);
         });
 
-        // Фільтруємо команди, залишаючи лише ті, які отримали хоча б одного реального гравця
         teams = teams.filter(team => team.players.length > 0);
 
         if (teams.length === 0) {
@@ -567,118 +567,151 @@
             }
         });
 
-        const easyShuffled = [...questionsDatabase.easy].sort(() => 0.5 - Math.random()).slice(0, 4);
-        const mediumShuffled = [...questionsDatabase.medium].sort(() => 0.5 - Math.random()).slice(0, 4);
-        const hardShuffled = [...questionsDatabase.hard].sort(() => 0.5 - Math.random()).slice(0, 4);
-        
-        gameQuestions = [...easyShuffled, ...mediumShuffled, ...hardShuffled];
-
-        currentQuestionIndex = 0;
+        currentGameRound = 1;
         currentTeamIndex = 0;
-        currentPlayerIndexInTeam = 0;
-        currentQuestionVotes = {};
+        voterIndexInTeam = 0;
+        usedQuestionsIds = [];
 
         updateScoreboard();
-        showQuestion();
+        showQuestionForTeam();
         switchScreen('screen-game');
     }
 
-    function showQuestion() {
+    function showQuestionForTeam() {
         document.getElementById('next-btn').style.display = 'none';
-        const qData = gameQuestions[currentQuestionIndex];
-        
+        temporaryPlayerChoices = [];
+        voterIndexInTeam = 0;
+
+        let pool = [];
         const diffBadge = document.getElementById('difficulty-indicator');
-        if (currentQuestionIndex < 4) {
+        
+        if (currentGameRound <= 4) {
+            pool = questionsDatabase.easy;
             diffBadge.innerText = "Легкий";
             diffBadge.className = "difficulty-badge diff-easy";
-        } else if (currentQuestionIndex < 8) {
+        } else if (currentGameRound <= 8) {
+            pool = questionsDatabase.medium;
             diffBadge.innerText = "Середній";
             diffBadge.className = "difficulty-badge diff-medium";
         } else {
+            pool = questionsDatabase.hard;
             diffBadge.innerText = "Складний";
             diffBadge.className = "difficulty-badge diff-hard";
         }
 
-        const activeTeam = teams[currentTeamIndex];
-        const activePlayer = activeTeam.players[currentPlayerIndexInTeam];
+        let availableQuestions = pool.filter(q => !usedQuestionsIds.includes(q.id));
+        
+        if (availableQuestions.length === 0) {
+            availableQuestions = pool; 
+        }
 
-        document.getElementById('round-num').innerText = `Раунд ${currentQuestionIndex + 1} із ${totalRounds}`;
-        document.getElementById('current-team-display').innerText = activeTeam.name;
-        document.getElementById('current-player-display').innerText = `${activePlayer.name} (${currentPlayerIndexInTeam + 1}/${activeTeam.players.length})`;
-        document.getElementById('q-topic').innerText = `Тема: ${qData.topic}`;
-        document.getElementById('q-text').innerText = qData.q;
+        selectedGlobalQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+        usedQuestionsIds.push(selectedGlobalQuestion.id);
 
-        const originalOptions = qData.a;
+        document.getElementById('round-num').innerText = `Раунд ${currentGameRound} із ${maxGameRounds}`;
+        
+        updateVoterTurnUI();
+
+        document.getElementById('q-topic').innerText = `Тема: ${selectedGlobalQuestion.topic}`;
+        document.getElementById('q-text').innerText = selectedGlobalQuestion.q;
+
+        const originalOptions = selectedGlobalQuestion.a;
         currentAnswersMapping = originalOptions.map((_, i) => i).sort(() => 0.5 - Math.random());
 
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
-
-        currentAnswersMapping.forEach((originalIdx, buttonIdx) => {
-            optionsContainer.innerHTML += `
-                <button class="option-btn" data-orig-idx="${originalIdx}" onclick="checkAnswer(${originalIdx}, this)">
-                    ${String.fromCharCode(65 + buttonIdx)}) &nbsp; ${originalOptions[originalIdx]}
-                </button>
-            `;
-        });
-
+        renderOptionsButtons(false);
         highlightCurrentTeamInScoreboard();
     }
 
-    function checkAnswer(selectedIndex, clickedBtn) {
-        const qData = gameQuestions[currentQuestionIndex];
+    function updateVoterTurnUI() {
         const activeTeam = teams[currentTeamIndex];
-        const activePlayer = activeTeam.players[currentPlayerIndexInTeam];
+        const activePlayer = activeTeam.players[voterIndexInTeam];
+        
+        document.getElementById('current-team-display').innerText = activeTeam.name;
+        document.getElementById('current-player-display').innerText = activePlayer.name;
+        
+        document.getElementById('voting-banner').innerText = 
+            `Опитування команди. Знавець [ ${activePlayer.name} ], оберіть ваш індивідуальний варіант!`;
+    }
 
-        activePlayer.questionsAsked += 1;
-        if (selectedIndex === qData.correct) {
-            activePlayer.correctAnswers += 1;
-            currentQuestionVotes[currentPlayerIndexInTeam] = true;
-        } else {
-            currentQuestionVotes[currentPlayerIndexInTeam] = false;
-        }
+    function renderOptionsButtons(isRevealed, selectedIdxByLast = null) {
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        const originalOptions = selectedGlobalQuestion.a;
 
-        currentPlayerIndexInTeam++;
-
-        if (currentPlayerIndexInTeam < activeTeam.players.length) {
-            showQuestion();
-        } else {
-            let correctCount = 0;
-            for (let idx in currentQuestionVotes) {
-                if (currentQuestionVotes[idx] === true) correctCount++;
-            }
+        currentAnswersMapping.forEach((originalIdx, buttonIdx) => {
+            let extraClass = '';
             
-            let teamFraction = correctCount / activeTeam.players.length;
-            activeTeam.score += teamFraction;
-
-            const allButtons = document.querySelectorAll('.option-btn');
-            allButtons.forEach(btn => {
-                btn.disabled = true;
-                let origIdx = parseInt(btn.getAttribute('data-orig-idx'));
-                if (origIdx === qData.correct) {
-                    btn.classList.add('correct');
-                } else if (origIdx === selectedIndex && !currentQuestionVotes[currentPlayerIndexInTeam - 1]) {
-                    btn.classList.add('wrong');
+            if (isRevealed) {
+                if (originalIdx === selectedGlobalQuestion.correct) {
+                    extraClass = ' correct'; 
+                } else if (originalIdx === selectedIdxByLast && originalIdx !== selectedGlobalQuestion.correct) {
+                    extraClass = ' wrong'; 
                 }
-            });
+            }
 
-            updateScoreboard();
-            document.getElementById('next-btn').style.display = 'inline-block';
+            const btn = document.createElement('button');
+            btn.className = `option-btn${extraClass}`;
+            btn.setAttribute('data-orig-idx', originalIdx);
+            if (isRevealed) btn.disabled = true;
+            btn.onclick = () => handlePlayerChoiceClick(originalIdx);
+            btn.textContent = `${String.fromCharCode(65 + buttonIdx)}) ${originalOptions[originalIdx]}`;
+
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function handlePlayerChoiceClick(chosenOriginalIndex) {
+        const activeTeam = teams[currentTeamIndex];
+        const activePlayer = activeTeam.players[voterIndexInTeam];
+
+        temporaryPlayerChoices.push({
+            playerRef: activePlayer,
+            chosenIdx: chosenOriginalIndex
+        });
+
+        voterIndexInTeam++;
+
+        if (voterIndexInTeam < activeTeam.players.length) {
+            updateVoterTurnUI();
+        } else {
+            revealAnswersAndCalculatePoints(chosenOriginalIndex);
         }
     }
 
-    function nextStep() {
-        currentPlayerIndexInTeam = 0;
-        currentQuestionVotes = {};
+    function revealAnswersAndCalculatePoints(lastChosenIdx) {
+        const activeTeam = teams[currentTeamIndex];
+        let correctCountInTeam = 0;
 
-        currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+        temporaryPlayerChoices.forEach(choice => {
+            choice.playerRef.questionsAsked += 1;
+            if (choice.chosenIdx === selectedGlobalQuestion.correct) {
+                choice.playerRef.correctAnswers += 1;
+                correctCountInTeam++;
+            }
+        });
+
+        let teamTurnScore = (correctCountInTeam / activeTeam.players.length);
+        activeTeam.score += teamTurnScore;
+
+        document.getElementById('voting-banner').innerHTML = 
+            `🎉 Раунд завершено! Правильних відповідей команди: <strong>${correctCountInTeam} з ${activeTeam.players.length}</strong>. Додано +${teamTurnScore.toFixed(2)} б.`;
+
+        renderOptionsButtons(true, lastChosenIdx);
+        updateScoreboard();
         
-        if (currentTeamIndex === 0) {
-            currentQuestionIndex++;
+        document.getElementById('next-btn').style.display = 'inline-block';
+    }
+
+    function nextStep() {
+        currentTeamIndex++;
+
+        if (currentTeamIndex >= teams.length) {
+            currentTeamIndex = 0;
+            currentGameRound++;
         }
 
-        if (currentQuestionIndex < totalRounds) {
-            showQuestion();
+        if (currentGameRound <= maxGameRounds) {
+            showQuestionForTeam();
         } else {
             showFinalResults();
         }
@@ -723,12 +756,12 @@
         teamRanksMapping = {};
         
         sortedTeamsGlobal.forEach((team, idx) => {
-            if (idx > 0 && team.score.toFixed(2) === sortedTeamsGlobal[idx - 1].score.toFixed(2)) {
-                teamRanksMapping[team.name] = teamRanksMapping[sortedTeamsGlobal[idx - 1].name];
-            } else {
-                teamRanksMapping[team.name] = currentRank;
+            if (idx > 0) {
+                if (team.score.toFixed(2) !== sortedTeamsGlobal[idx - 1].score.toFixed(2)) {
+                    currentRank++;
+                }
             }
-            currentRank++;
+            teamRanksMapping[team.name] = currentRank;
         });
 
         let isAbsoluteTie = sortedTeamsGlobal.length > 1 && 
@@ -771,7 +804,6 @@
         });
     }
 
-    // БУЛЕТПРОФ ФУНКЦІЯ ДЛЯ РЕНДЕРУ УКРАЇНСЬКОГО ТЕКСТУ В PDF ЧЕРЕЗ HTML5 CANVAS
     function downloadGeneralReportPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('p', 'mm', 'a4');
@@ -779,15 +811,12 @@
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
         
-        // Встановлюємо високу роздільну здатність для чіткого тексту
         canvas.width = 1200;
-        canvas.height = 1600;
+        canvas.height = 1800;
         
-        // Фон
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Заголовок
         ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 36px Montserrat, Helvetica, sans-serif';
         ctx.fillText("ЗВІТ РЕЗУЛЬТАТІВ ІНТЕЛЕКТУАЛЬНОЇ ГРИ", 80, 100);
@@ -799,9 +828,8 @@
         let currentDate = new Date().toLocaleDateString('uk-UA');
         ctx.font = '20px Montserrat, Helvetica, sans-serif';
         ctx.fillText(`Дата проведення: ${currentDate}`, 80, 200);
-        ctx.fillText(`Загальна кількість раундів: ${totalRounds}`, 80, 235);
+        ctx.fillText(`Кількість раундів гри: ${maxGameRounds} (12 запитань на кожного учня)`, 80, 235);
         
-        // Лінія розділювач
         ctx.strokeStyle = '#cbd5e1';
         ctx.lineWidth = 3;
         ctx.beginPath();
@@ -809,7 +837,6 @@
         ctx.lineTo(1120, 270);
         ctx.stroke();
         
-        // Рейтинг команд
         ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 26px Montserrat, Helvetica, sans-serif';
         ctx.fillText("РЕЙТИНГ КОМАНД ТА МІСЦЯ:", 80, 330);
@@ -828,11 +855,10 @@
         ctx.lineTo(1120, yOffset);
         ctx.stroke();
         
-        // Індивідуальні оцінки
         yOffset += 50;
         ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 26px Montserrat, Helvetica, sans-serif';
-        ctx.fillText("ПЕРСОНАЛЬНА ПРОДУКТИВНІСТЬ УЧАСНИКІВ (1-12 балів):", 80, yOffset);
+        ctx.fillText("ПЕРСОНАЛЬНА ПРОДУКТИВНІСТЬ УЧАСНИКІВ (ОЦІНКИ 1-12 БАЛІВ):", 80, yOffset);
         yOffset += 50;
         
         teams.forEach(team => {
@@ -849,10 +875,7 @@
                     accuracy = (player.correctAnswers / player.questionsAsked) * 100;
                 }
                 
-                let baseGrade = Math.round((accuracy / 100) * 12);
-                if (baseGrade < 1 && player.questionsAsked > 0) baseGrade = 1;
-                if (player.correctAnswers === 0) baseGrade = 0;
-
+                let baseGrade = player.correctAnswers; 
                 let finalGrade = Math.min(12, baseGrade + bonusPoints);
 
                 ctx.fillStyle = '#1e293b';
@@ -862,15 +885,11 @@
                 
                 ctx.fillStyle = '#64748b';
                 ctx.font = '18px Montserrat, Helvetica, sans-serif';
-                ctx.fillText(`   Відповіді: ${player.correctAnswers}/${player.questionsAsked} (${accuracy.toFixed(0)}%) | База: ${baseGrade}/12 | Бонус: ${bonusStr} | РАЗОМ: ${finalGrade} б.`, 100, yOffset);
+                ctx.fillText(` Відповіді: ${player.correctAnswers}/${player.questionsAsked} (${accuracy.toFixed(0)}%) | База: ${baseGrade}/12 | Бонус: ${bonusStr} | РАЗОМ: ${finalGrade} б.`, 100, yOffset);
                 yOffset += 50;
-                
-                // Якщо текст виходить за межі першої сторінки, ми можемо або зменшити шрифт, або додати другу сторінку.
-                // Для нашої кількості команд цього полотна вистачає із запасом.
             });
         });
         
-        // Конвертуємо канвас в картинку високої якості всередині PDF
         let imgData = canvas.toDataURL('image/jpeg', 1.0);
         doc.addImage(imgData, 'JPEG', 0, 0, 210, 297);
         
