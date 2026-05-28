@@ -389,9 +389,7 @@
         
         <label>Додайте учасників гри:</label>
         <div id="players-inputs-container" class="players-input-list">
-            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value="Andriy"></div>
-            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value="Oleg"></div>
-            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value="Maria"></div>
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value=""></div>
         </div>
         <button class="btn btn-secondary" onclick="addPlayerField()">+ Додати учасника</button>
         <br><br>
@@ -439,7 +437,7 @@
 </div>
 
 <script>
-    // БАЗА З ЗАПИТАННЯМИ, РОЗДІЛЕНА ЗА РІВНЯМИ СКЛАДНОСТІ (Складність зростає)
+    // БАЗА З ЗАПИТАННЯМИ, РОЗДІЛЕНА ЗА РІВНЯМИ СКЛАДНОСТІ
     const questionsDatabase = {
         easy: [
             { topic: "Персональний цифровий простір", q: "Що є основою вашого персонального цифрового простору?", a: ["Набір хмарних сервісів, пристроїв та даних", "Лише ваш шкільний щоденник", "Будь-який комп'ютер у кав'ярні"], correct: 0 },
@@ -458,7 +456,7 @@
             { topic: "Конструктор вебсайтів", q: "Що таке 'макет сайту'?", a: ["Готовий програмний код", "Схема розташування елементів (заголовок, меню, контент)", "Текст, написаний для головної сторінки"], correct: 1 },
             { topic: "Конструктор вебсайтів", q: "Чому важливо стискати великі зображення перед завантаженням на сайт?", a: ["Щоб сайт завантажувався швидше", "Щоб картинка стала чорно-білою", "Це необов'язково, конструктор сам усе видалить"], correct: 0 },
             { topic: "Конструктор вебсайтів", q: "Як називається головне вікно навігації по сторінках сайту?", a: ["Підвал (Footer)", "Menu saytu (Navigation bar)", "Банер"], correct: 1 },
-            { topic: "Публікація вебсайту", q: "Що відбувається після натискання кнопки 'Опублікувати' в конструкторі сайтів?", a: ["Сайт видаляється", "Сайт стає доступним для користувачів в інтернеті", "Сайт зберігається як документ Word"], correct: 1 },
+            { topic: "Публікація вебсайту", q: "Що відбувається після натискання кнопки 'Опублікувати' в конструкторі сайтів?", a: ["Сайт видаляється", "Сайт стає доступним для користувачів в інтернеєті", "Сайт зберігається як документ Word"], correct: 1 },
             { topic: "Як ШІ допомагає у контенті", q: "Що з переліченого є етичним використанням штучного інтелекту?", a: ["Видавати згенерований ШІ текст за власну наукову роботу", "Використовувати ШІ для пошуку ідей та структурування інформації", "Створювати фейкові новини з підробленими фото"], correct: 1 },
             { topic: "Тексти та публікації", q: "Що таке комп'ютерна публікація?", a: ["Процес видання тексту на папері або в електронному вигляді", "Перегляд відео на YouTube", "Надсилання повідомлення другові"], correct: 0 },
             { topic: "Вигляд документа та оформлення", q: "Яке головне правило підбору шрифтів для презентації або публікації?", a: ["Використовувати якомога більше різних шрифтів на одному слайді", "Використовувати не більше 2-3 шрифтів, які добре читаються", "Шрифт обов'язково має бути рукописним"], correct: 1 },
@@ -469,7 +467,7 @@
         ],
         hard: [
             { topic: "Графічне програмування", q: "Яка точка на графічному полотні зазвичай має координати (0,0)?", a: ["Центр екрана", "Лівий верхній кут", "Правий нижній кут"], correct: 1 },
-            { topic: "Графічне програмування", q: "Якщо ми збільшуємо координату Y в комп'ютерній графіці, куди рухається об'єкт?", a: ["Вгору", "Вліво", "Вниз"], correct: 2 },
+            { topic: "Графічне програмування", q: "Якщо мы збільшуємо координату Y в комп'ютерній графіці, куди рухається об'єкт?", a: ["Вгору", "Вліво", "Вниз"], correct: 2 },
             { topic: "Монстри (Програмування)", q: "Як у коді реалізувати випадковий вигляд або колір для малювання робота/монстра?", a: ["Функцією random()", "За допомогою клавіатури", "Колір завжди фіксований"], correct: 0 },
             { topic: "Абстракціонізм", q: "Які інструменти коду потрібні для відтворення геометричних абстракцій?", a: ["Функції малювання фігур (rect, ellipse, line)", "Лише текстові оператори", "Програми архівації"], correct: 0 },
             { topic: "Креативне умеблювання кімнати", q: "Який математичний принцип допомагає правильно масштабувати об'єкти на екрані?", a: ["Пропорція", "Додавання одиниці", "Теорема Вієта"], correct: 0 },
@@ -492,8 +490,8 @@
     let allPlayersGlobal = [];
     let currentQuestionIndex = 0;
     let currentTeamIndex = 0;
-    let currentPlayerIndexInTeam = 0; // Трекаємо конкретного гравця в команді для покрокової відповіді
-    let currentQuestionVotes = {}; // Зберігає голоси учасників поточної команди за поточний раунд
+    let currentPlayerIndexInTeam = 0; 
+    let currentQuestionVotes = {}; 
     let currentAnswersMapping = [];
     const totalRounds = 12;
 
@@ -518,7 +516,7 @@
         });
 
         if (players.length === 0) {
-            alert("Будь ласка, введіть хоча б кілька імен учасників!");
+            alert("Будь ласка, введіть хоча б одне ім'я учасника!");
             return;
         }
 
@@ -531,22 +529,19 @@
             teams.push({ name: `Команда ${i}`, score: 0, players: [] });
         }
 
+        // Рандомний розподіл лише реальних введених учасників
         let shuffledPlayers = [...players].sort(() => 0.5 - Math.random());
-
         shuffledPlayers.forEach((player, idx) => {
             let teamIdx = idx % teamsCount;
             teams[teamIdx].players.push(player);
         });
 
-        // Забезпечуємо наявність гравців у всіх обраних командах
-        for (let i = 0; i < teamsCount; i++) {
-            if (teams[i].players.length === 0) {
-                // Додаємо фейкового гравця, якщо не вистачає реальних
-                let pName = "Учень " + (i + 1);
-                let dummy = { name: pName, questionsAsked: 0, correctAnswers: 0 };
-                teams[i].players.push(dummy);
-                allPlayersGlobal.push(dummy);
-            }
+        // Фільтруємо команди, залишаючи лише ті, які отримали хоча б одного реального гравця
+        teams = teams.filter(team => team.players.length > 0);
+
+        if (teams.length === 0) {
+            alert("Помилка розподілу учасників!");
+            return;
         }
 
         const container = document.getElementById('team-inputs-container');
@@ -572,7 +567,6 @@
             }
         });
 
-        // Динамічне зростання складності: 4 легких, 4 середніх, 4 складних запитання
         const easyShuffled = [...questionsDatabase.easy].sort(() => 0.5 - Math.random()).slice(0, 4);
         const mediumShuffled = [...questionsDatabase.medium].sort(() => 0.5 - Math.random()).slice(0, 4);
         const hardShuffled = [...questionsDatabase.hard].sort(() => 0.5 - Math.random()).slice(0, 4);
@@ -636,7 +630,6 @@
         const activeTeam = teams[currentTeamIndex];
         const activePlayer = activeTeam.players[currentPlayerIndexInTeam];
 
-        // Записуємо голос поточного учасника команди
         activePlayer.questionsAsked += 1;
         if (selectedIndex === qData.correct) {
             activePlayer.correctAnswers += 1;
@@ -645,23 +638,19 @@
             currentQuestionVotes[currentPlayerIndexInTeam] = false;
         }
 
-        // Переходимо до наступного учасника поточної команди для цього ж запитання
         currentPlayerIndexInTeam++;
 
         if (currentPlayerIndexInTeam < activeTeam.players.length) {
-            // Ще не всі учасники цієї команди проголосували за поточне питання
             showQuestion();
         } else {
-            // Усі учасники команди проголосували! Рахуємо відсоток правильних відповідей
             let correctCount = 0;
             for (let idx in currentQuestionVotes) {
                 if (currentQuestionVotes[idx] === true) correctCount++;
             }
             
             let teamFraction = correctCount / activeTeam.players.length;
-            activeTeam.score += teamFraction; // Додаємо дробовий бал до рахунку команди
+            activeTeam.score += teamFraction;
 
-            // Показуємо результат (підсвічуємо правильну/неправильну відповідь останнього вибору)
             const allButtons = document.querySelectorAll('.option-btn');
             allButtons.forEach(btn => {
                 btn.disabled = true;
@@ -682,12 +671,8 @@
         currentPlayerIndexInTeam = 0;
         currentQuestionVotes = {};
 
-        // Черга переходить до наступної команди
         currentTeamIndex = (currentTeamIndex + 1) % teams.length;
         
-        // Збільшуємо загальний індекс питань після того, як кожна команда відповість у поточному колі раундів
-        // Або простіше: раунд закінчується, коли всі команди відповіли.
-        // Оскільки у нас 12 раундів, і кожен учасник має відповісти на 12 запитань, гра триває, доки кожна команда не зіграє 12 раундів.
         if (currentTeamIndex === 0) {
             currentQuestionIndex++;
         }
@@ -725,23 +710,20 @@
     }
 
     let sortedTeamsGlobal = [];
-    let teamRanksMapping = {}; // Мапінг для збереження місць команд із урахуванням нічиєї
+    let teamRanksMapping = {}; 
 
     function showFinalResults() {
         switchScreen('screen-results');
         const podiumContainer = document.getElementById('podium');
         podiumContainer.innerHTML = '';
 
-        // Сортуємо за спаданням балів
         sortedTeamsGlobal = [...teams].sort((a, b) => b.score - a.score);
 
-        // Розраховуємо місця з урахуванням нічиїх (однакова кількість балів = однакове місце)
         let currentRank = 1;
         teamRanksMapping = {};
         
         sortedTeamsGlobal.forEach((team, idx) => {
             if (idx > 0 && team.score.toFixed(2) === sortedTeamsGlobal[idx - 1].score.toFixed(2)) {
-                // Нічия з попередньою командою
                 teamRanksMapping[team.name] = teamRanksMapping[sortedTeamsGlobal[idx - 1].name];
             } else {
                 teamRanksMapping[team.name] = currentRank;
@@ -749,7 +731,6 @@
             currentRank++;
         });
 
-        // Перевірка на абсолютну нічию всіх лідерів
         let isAbsoluteTie = sortedTeamsGlobal.length > 1 && 
             (sortedTeamsGlobal[0].score.toFixed(2) === sortedTeamsGlobal[sortedTeamsGlobal.length - 1].score.toFixed(2));
 
@@ -761,7 +742,6 @@
             document.getElementById('final-title').innerText = "Фінал гри! Вітаємо переможців!";
         }
 
-        // Рендеримо п'єдестал у гарному порядку для візуалізації
         let renderOrder = [];
         if (sortedTeamsGlobal.length === 1) {
             renderOrder = [0];
@@ -791,62 +771,77 @@
         });
     }
 
+    // БУЛЕТПРОФ ФУНКЦІЯ ДЛЯ РЕНДЕРУ УКРАЇНСЬКОГО ТЕКСТУ В PDF ЧЕРЕЗ HTML5 CANVAS
     function downloadGeneralReportPDF() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+        const doc = new jsPDF('p', 'mm', 'a4');
         
-        let yPos = 20;
-        doc.setFont("Helvetica", "bold");
-        doc.setFontSize(18);
-        doc.text("ZVIT REZULTATIV INTELEKTUALNOYI HRY", 20, yPos);
-        yPos += 10;
-        doc.setFontSize(14);
-        doc.text("Nazva hry: Scho? De? Koly? - Informatyka 7 Klas", 20, yPos);
-        yPos += 8;
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        
+        // Встановлюємо високу роздільну здатність для чіткого тексту
+        canvas.width = 1200;
+        canvas.height = 1600;
+        
+        // Фон
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Заголовок
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 36px Montserrat, Helvetica, sans-serif';
+        ctx.fillText("ЗВІТ РЕЗУЛЬТАТІВ ІНТЕЛЕКТУАЛЬНОЇ ГРИ", 80, 100);
+        
+        ctx.font = '600 24px Montserrat, Helvetica, sans-serif';
+        ctx.fillStyle = '#475569';
+        ctx.fillText("Назва гри: Що? Де? Коли? — Інформатика 7 Клас", 80, 150);
         
         let currentDate = new Date().toLocaleDateString('uk-UA');
-        doc.text(`Data: ${currentDate}`, 20, yPos);
-        yPos += 8;
-        doc.text(`Kilkist raundiv: ${totalRounds}`, 20, yPos);
-        yPos += 10;
+        ctx.font = '20px Montserrat, Helvetica, sans-serif';
+        ctx.fillText(`Дата проведення: ${currentDate}`, 80, 200);
+        ctx.fillText(`Загальна кількість раундів: ${totalRounds}`, 80, 235);
         
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-
-        doc.setFont("Helvetica", "bold");
-        doc.setFontSize(12);
-        doc.text("REZULTATY KOMAND TA REYTYNH (MISCIA):", 20, yPos);
-        yPos += 8;
-
-        doc.setFont("Helvetica", "normal");
-        doc.setFontSize(11);
+        // Лінія розділювач
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(80, 270);
+        ctx.lineTo(1120, 270);
+        ctx.stroke();
+        
+        // Рейтинг команд
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 26px Montserrat, Helvetica, sans-serif';
+        ctx.fillText("РЕЙТИНГ КОМАНД ТА МІСЦЯ:", 80, 330);
+        
+        ctx.font = '22px Montserrat, Helvetica, sans-serif';
+        let yOffset = 380;
         sortedTeamsGlobal.forEach(team => {
             let rank = teamRanksMapping[team.name];
-            doc.text(`- ${team.name}: ${team.score.toFixed(2)} baliv (Miscia/Rank: ${rank})`, 20, yPos);
-            yPos += 6;
+            ctx.fillText(`• ${team.name}: ${team.score.toFixed(2)} балів (Місце: ${rank})`, 100, yOffset);
+            yOffset += 40;
         });
-
-        yPos += 6;
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-
-        doc.setFont("Helvetica", "bold");
-        doc.setFontSize(12);
-        doc.text("PERSONALNA PRODUKTYVNIST UCHASNYKIV (1-12 baliv):", 20, yPos);
-        yPos += 8;
-
-        doc.setFont("Helvetica", "normal");
-        doc.setFontSize(10);
-
+        
+        yOffset += 20;
+        ctx.beginPath();
+        ctx.moveTo(80, yOffset);
+        ctx.lineTo(1120, yOffset);
+        ctx.stroke();
+        
+        // Індивідуальні оцінки
+        yOffset += 50;
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 26px Montserrat, Helvetica, sans-serif';
+        ctx.fillText("ПЕРСОНАЛЬНА ПРОДУКТИВНІСТЬ УЧАСНИКІВ (1-12 балів):", 80, yOffset);
+        yOffset += 50;
+        
         teams.forEach(team => {
             let rank = teamRanksMapping[team.name];
-            
-            // Нарахування бонусів: за 1 місце - +3 бали, за 2 місце - +2 бали, за 3 місце - +1 бал
             let bonusPoints = 0;
             let bonusStr = "0";
-            if (rank === 1) { bonusPoints = 3; bonusStr = "+3 (1st Place)"; }
-            else if (rank === 2) { bonusPoints = 2; bonusStr = "+2 (2nd Place)"; }
-            else if (rank === 3) { bonusPoints = 1; bonusStr = "+1 (3rd Place)"; }
+            if (rank === 1) { bonusPoints = 3; bonusStr = "+3 (1 місце)"; }
+            else if (rank === 2) { bonusPoints = 2; bonusStr = "+2 (2 місце)"; }
+            else if (rank === 3) { bonusPoints = 1; bonusStr = "+1 (3 місце)"; }
 
             team.players.forEach(player => {
                 let accuracy = 0;
@@ -854,30 +849,32 @@
                     accuracy = (player.correctAnswers / player.questionsAsked) * 100;
                 }
                 
-                // Базова оцінка від 1 до 12 відповідно до кількості відповідей
                 let baseGrade = Math.round((accuracy / 100) * 12);
                 if (baseGrade < 1 && player.questionsAsked > 0) baseGrade = 1;
                 if (player.correctAnswers === 0) baseGrade = 0;
 
                 let finalGrade = Math.min(12, baseGrade + bonusPoints);
 
-                let lineText = `Grahovec: ${player.name} | Komanda: ${team.name} (Rank: ${rank})`;
-                doc.text(lineText, 20, yPos);
-                yPos += 5;
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '600 20px Montserrat, Helvetica, sans-serif';
+                ctx.fillText(`Гравець: ${player.name} | Команда: ${team.name} (Місце: ${rank})`, 100, yOffset);
+                yOffset += 30;
                 
-                let statsText = `  Vidpovidi: ${player.correctAnswers}/${player.questionsAsked} (${accuracy.toFixed(0)}%) | Baza: ${baseGrade}/12 | Bonus: ${bonusStr} | RAZOM: ${finalGrade} b.`;
-                doc.text(statsText, 20, yPos);
+                ctx.fillStyle = '#64748b';
+                ctx.font = '18px Montserrat, Helvetica, sans-serif';
+                ctx.fillText(`   Відповіді: ${player.correctAnswers}/${player.questionsAsked} (${accuracy.toFixed(0)}%) | База: ${baseGrade}/12 | Бонус: ${bonusStr} | РАЗОМ: ${finalGrade} б.`, 100, yOffset);
+                yOffset += 50;
                 
-                yPos += 10;
-
-                if (yPos > 270) {
-                    doc.addPage();
-                    yPos = 20;
-                }
+                // Якщо текст виходить за межі першої сторінки, ми можемо або зменшити шрифт, або додати другу сторінку.
+                // Для нашої кількості команд цього полотна вистачає із запасом.
             });
         });
-
-        doc.save("Zvit_Scho_De_Koly_7_Klas.pdf");
+        
+        // Конвертуємо канвас в картинку високої якості всередині PDF
+        let imgData = canvas.toDataURL('image/jpeg', 1.0);
+        doc.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+        
+        doc.save("Звіт_Що_Де_Коли_7_Клас.pdf");
     }
 
     function switchScreen(screenId) {
