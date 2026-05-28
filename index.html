@@ -389,9 +389,9 @@
         
         <label>Додайте учасників гри:</label>
         <div id="players-inputs-container" class="players-input-list">
-            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника"></div>
-            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника"></div>
-            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника"></div>
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value="Andriy"></div>
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value="Oleg"></div>
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника" value="Maria"></div>
         </div>
         <button class="btn btn-secondary" onclick="addPlayerField()">+ Додати учасника</button>
         <br><br>
@@ -410,7 +410,7 @@
                 <div id="round-num" class="round-indicator">Раунд 1 із 12</div>
                 <div id="difficulty-indicator" class="difficulty-badge diff-easy">Легкий</div>
             </div>
-            <div class="current-team-badge">Відповідає: <span id="current-team-display">Команда</span> (<span id="current-player-display">Учень</span>)</div>
+            <div class="current-team-badge">Відповідає команда: <span id="current-team-display">Команда</span><br><small style="color:var(--text-muted)">Черга учасника: <span id="current-player-display" style="color:var(--accent-gold)">Учень</span></small></div>
         </div>
 
         <div class="question-box">
@@ -426,7 +426,7 @@
     </div>
 
     <div id="screen-results" class="screen">
-        <h2>Фінал гри! Вітаємо переможців!</h2>
+        <h2 id="final-title">Фінал гри! Вітаємо переможців!</h2>
         <div id="podium" class="podium-container"></div>
         <div class="wishes">
             Успіхів у подальшому вивченні захопливого світу інформатики! <br>🚀 Ви — справжні знавці 2026 року! 🚀
@@ -457,7 +457,7 @@
             { topic: "Візуальний контент", q: "Який формат зображення підтримує прозорість фону?", a: ["JPEG", "PNG", "BMP"], correct: 1 },
             { topic: "Конструктор вебсайтів", q: "Що таке 'макет сайту'?", a: ["Готовий програмний код", "Схема розташування елементів (заголовок, меню, контент)", "Текст, написаний для головної сторінки"], correct: 1 },
             { topic: "Конструктор вебсайтів", q: "Чому важливо стискати великі зображення перед завантаженням на сайт?", a: ["Щоб сайт завантажувався швидше", "Щоб картинка стала чорно-білою", "Це необов'язково, конструктор сам усе видалить"], correct: 0 },
-            { topic: "Конструктор вебсайтів", q: "Як називається головне вікно навігації по сторінках сайту?", a: ["Підвал (Footer)", "Меню сайту (Navigation bar)", "Банер"], correct: 1 },
+            { topic: "Конструктор вебсайтів", q: "Як називається головне вікно навігації по сторінках сайту?", a: ["Підвал (Footer)", "Menu saytu (Navigation bar)", "Банер"], correct: 1 },
             { topic: "Публікація вебсайту", q: "Що відбувається після натискання кнопки 'Опублікувати' в конструкторі сайтів?", a: ["Сайт видаляється", "Сайт стає доступним для користувачів в інтернеті", "Сайт зберігається як документ Word"], correct: 1 },
             { topic: "Як ШІ допомагає у контенті", q: "Що з переліченого є етичним використанням штучного інтелекту?", a: ["Видавати згенерований ШІ текст за власну наукову роботу", "Використовувати ШІ для пошуку ідей та структурування інформації", "Створювати фейкові новини з підробленими фото"], correct: 1 },
             { topic: "Тексти та публікації", q: "Що таке комп'ютерна публікація?", a: ["Процес видання тексту на папері або в електронному вигляді", "Перегляд відео на YouTube", "Надсилання повідомлення другові"], correct: 0 },
@@ -489,13 +489,14 @@
 
     let gameQuestions = [];
     let teams = [];
-    let allPlayersGlobal = []; // Загальний реєстр учнів для оцінювання
+    let allPlayersGlobal = [];
     let currentQuestionIndex = 0;
     let currentTeamIndex = 0;
-    let currentAnswersMapping = []; // Мапінг для заплутування кнопок
+    let currentPlayerIndexInTeam = 0; // Трекаємо конкретного гравця в команді для покрокової відповіді
+    let currentQuestionVotes = {}; // Зберігає голоси учасників поточної команди за поточний раунд
+    let currentAnswersMapping = [];
     const totalRounds = 12;
 
-    // ДОДАТИ ПОЛЕ ДЛЯ НОВОГО УЧАСНИКА
     function addPlayerField() {
         const container = document.getElementById('players-inputs-container');
         const div = document.createElement('div');
@@ -507,7 +508,6 @@
         container.appendChild(div);
     }
 
-    // РАНДОМАЙЗЕР: РОЗПОДІЛ ПО КОМАНДАХ
     function distributePlayersAndGoNext() {
         const inputElements = document.querySelectorAll('.player-name-input');
         let players = [];
@@ -517,35 +517,38 @@
             if (name) players.push({ name: name, questionsAsked: 0, correctAnswers: 0 });
         });
 
-        // Якщо масив пустий, заповнимо авто-іменами для тестування
         if (players.length === 0) {
             alert("Будь ласка, введіть хоча б кілька імен учасників!");
             return;
         }
 
-        allPlayersGlobal = players; // зберігаємо посилання
+        allPlayersGlobal = players;
 
         const teamsCount = parseInt(document.getElementById('teams-count-select').value);
         
-        // Ініціалізуємо команди
         teams = [];
         for(let i = 1; i <= teamsCount; i++) {
-            teams.push({ name: `Команда ${i}`, score: 0, players: [], currentPlayerPointer: 0 });
+            teams.push({ name: `Команда ${i}`, score: 0, players: [] });
         }
 
-        // Перемішуємо гравців для випадкового розподілу
         let shuffledPlayers = [...players].sort(() => 0.5 - Math.random());
 
-        // Розкидаємо по черзі в команди
         shuffledPlayers.forEach((player, idx) => {
             let teamIdx = idx % teamsCount;
             teams[teamIdx].players.push(player);
         });
 
-        // Очищаємо від команд без гравців (якщо раптом гравців менше ніж команд)
-        teams = teams.filter(t => t.players.length > 0);
+        // Забезпечуємо наявність гравців у всіх обраних командах
+        for (let i = 0; i < teamsCount; i++) {
+            if (teams[i].players.length === 0) {
+                // Додаємо фейкового гравця, якщо не вистачає реальних
+                let pName = "Учень " + (i + 1);
+                let dummy = { name: pName, questionsAsked: 0, correctAnswers: 0 };
+                teams[i].players.push(dummy);
+                allPlayersGlobal.push(dummy);
+            }
+        }
 
-        // Генеруємо інтерфейс перегляду та редагування назв команд
         const container = document.getElementById('team-inputs-container');
         container.innerHTML = '';
         teams.forEach((team, idx) => {
@@ -561,9 +564,7 @@
         switchScreen('screen-teams-names');
     }
 
-    // СТАРТ ГРИ ТА СТВОРЕННЯ СТРУКТУРИ КУРСУ СКЛАДНОСТІ
     function startGame() {
-        // Оновлюємо кастомні назви команд, якщо вчитель змінив їх
         teams.forEach((team, idx) => {
             const input = document.getElementById(`team-name-change-${idx}`);
             if (input && input.value.trim()) {
@@ -580,18 +581,18 @@
 
         currentQuestionIndex = 0;
         currentTeamIndex = 0;
+        currentPlayerIndexInTeam = 0;
+        currentQuestionVotes = {};
 
         updateScoreboard();
         showQuestion();
         switchScreen('screen-game');
     }
 
-    // ВІДОБРАЖЕННЯ ЗАПИТАННЯ З РАНДОМІЗАЦІЄЮ КНОПОК
     function showQuestion() {
         document.getElementById('next-btn').style.display = 'none';
         const qData = gameQuestions[currentQuestionIndex];
         
-        // Візуалізація складності
         const diffBadge = document.getElementById('difficulty-indicator');
         if (currentQuestionIndex < 4) {
             diffBadge.innerText = "Легкий";
@@ -604,24 +605,16 @@
             diffBadge.className = "difficulty-badge diff-hard";
         }
 
-        // Поточна команда та активний гравець
         const activeTeam = teams[currentTeamIndex];
-        const activePlayer = activeTeam.players[activeTeam.currentPlayerPointer];
-
-        // Трекаємо, що гравцю випало питання
-        activePlayer.questionsAsked += 1;
+        const activePlayer = activeTeam.players[currentPlayerIndexInTeam];
 
         document.getElementById('round-num').innerText = `Раунд ${currentQuestionIndex + 1} із ${totalRounds}`;
         document.getElementById('current-team-display').innerText = activeTeam.name;
-        document.getElementById('current-player-display').innerText = activePlayer.name;
+        document.getElementById('current-player-display').innerText = `${activePlayer.name} (${currentPlayerIndexInTeam + 1}/${activeTeam.players.length})`;
         document.getElementById('q-topic').innerText = `Тема: ${qData.topic}`;
         document.getElementById('q-text').innerText = qData.q;
 
-        // Перемішування відповідей для розташування по випадковим кнопкам
         const originalOptions = qData.a;
-        const correctText = originalOptions[qData.correct];
-        
-        // Створюємо масив індексів [0, 1, 2] і перемішуємо його
         currentAnswersMapping = originalOptions.map((_, i) => i).sort(() => 0.5 - Math.random());
 
         const optionsContainer = document.getElementById('options-container');
@@ -638,42 +631,66 @@
         highlightCurrentTeamInScoreboard();
     }
 
-    // ПЕРЕВІРКА ВІДПОВІДІ
     function checkAnswer(selectedIndex, clickedBtn) {
         const qData = gameQuestions[currentQuestionIndex];
-        const allButtons = document.querySelectorAll('.option-btn');
         const activeTeam = teams[currentTeamIndex];
-        const activePlayer = activeTeam.players[activeTeam.currentPlayerPointer];
+        const activePlayer = activeTeam.players[currentPlayerIndexInTeam];
 
-        allButtons.forEach(btn => btn.disabled = true);
-
+        // Записуємо голос поточного учасника команди
+        activePlayer.questionsAsked += 1;
         if (selectedIndex === qData.correct) {
-            clickedBtn.classList.add('correct');
-            activeTeam.score += 1; 
-            activePlayer.correctAnswers += 1; // Зараховуємо персональний бал
+            activePlayer.correctAnswers += 1;
+            currentQuestionVotes[currentPlayerIndexInTeam] = true;
         } else {
-            clickedBtn.classList.add('wrong');
-            // Підсвічуємо правильну кнопку за її оригінальним індексом
-            allButtons.forEach(btn => {
-                if(parseInt(btn.getAttribute('data-orig-idx')) === qData.correct) {
-                    btn.classList.add('correct');
-                }
-            });
+            currentQuestionVotes[currentPlayerIndexInTeam] = false;
         }
 
-        updateScoreboard();
-        document.getElementById('next-btn').style.display = 'inline-block';
+        // Переходимо до наступного учасника поточної команди для цього ж запитання
+        currentPlayerIndexInTeam++;
+
+        if (currentPlayerIndexInTeam < activeTeam.players.length) {
+            // Ще не всі учасники цієї команди проголосували за поточне питання
+            showQuestion();
+        } else {
+            // Усі учасники команди проголосували! Рахуємо відсоток правильних відповідей
+            let correctCount = 0;
+            for (let idx in currentQuestionVotes) {
+                if (currentQuestionVotes[idx] === true) correctCount++;
+            }
+            
+            let teamFraction = correctCount / activeTeam.players.length;
+            activeTeam.score += teamFraction; // Додаємо дробовий бал до рахунку команди
+
+            // Показуємо результат (підсвічуємо правильну/неправильну відповідь останнього вибору)
+            const allButtons = document.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                let origIdx = parseInt(btn.getAttribute('data-orig-idx'));
+                if (origIdx === qData.correct) {
+                    btn.classList.add('correct');
+                } else if (origIdx === selectedIndex && !currentQuestionVotes[currentPlayerIndexInTeam - 1]) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            updateScoreboard();
+            document.getElementById('next-btn').style.display = 'inline-block';
+        }
     }
 
-    // ПЕРЕХІД ДО НАСТУПНОГО КРОКУ
     function nextStep() {
-        // Пересуваємо покажчик гравця всередині поточної команди на наступного
-        const activeTeam = teams[currentTeamIndex];
-        activeTeam.currentPlayerPointer = (activeTeam.currentPlayerPointer + 1) % activeTeam.players.length;
+        currentPlayerIndexInTeam = 0;
+        currentQuestionVotes = {};
 
-        currentQuestionIndex++;
-        // Зміна черги команд
+        // Черга переходить до наступної команди
         currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+        
+        // Збільшуємо загальний індекс питань після того, як кожна команда відповість у поточному колі раундів
+        // Або простіше: раунд закінчується, коли всі команди відповіли.
+        // Оскільки у нас 12 раундів, і кожен учасник має відповісти на 12 запитань, гра триває, доки кожна команда не зіграє 12 раундів.
+        if (currentTeamIndex === 0) {
+            currentQuestionIndex++;
+        }
 
         if (currentQuestionIndex < totalRounds) {
             showQuestion();
@@ -682,14 +699,13 @@
         }
     }
 
-    // ОНОВЛЕННЯ ТАБЛО
     function updateScoreboard() {
         const sb = document.getElementById('scoreboard');
         sb.innerHTML = '';
         teams.forEach((team, idx) => {
             sb.innerHTML += `
                 <div class="score-pill" id="score-pill-${idx}">
-                    ${team.name}: <strong>${team.score}</strong>
+                    ${team.name}: <strong>${team.score.toFixed(2)}</strong> б.
                 </div>
             `;
         });
@@ -708,16 +724,44 @@
         });
     }
 
-    // ФІНАЛЬНИЙ ЕКРАН П'ЄДЕСТАЛУ
     let sortedTeamsGlobal = [];
+    let teamRanksMapping = {}; // Мапінг для збереження місць команд із урахуванням нічиєї
+
     function showFinalResults() {
         switchScreen('screen-results');
         const podiumContainer = document.getElementById('podium');
         podiumContainer.innerHTML = '';
 
-        // Сортуємо команди за набраними балами
+        // Сортуємо за спаданням балів
         sortedTeamsGlobal = [...teams].sort((a, b) => b.score - a.score);
 
+        // Розраховуємо місця з урахуванням нічиїх (однакова кількість балів = однакове місце)
+        let currentRank = 1;
+        teamRanksMapping = {};
+        
+        sortedTeamsGlobal.forEach((team, idx) => {
+            if (idx > 0 && team.score.toFixed(2) === sortedTeamsGlobal[idx - 1].score.toFixed(2)) {
+                // Нічия з попередньою командою
+                teamRanksMapping[team.name] = teamRanksMapping[sortedTeamsGlobal[idx - 1].name];
+            } else {
+                teamRanksMapping[team.name] = currentRank;
+            }
+            currentRank++;
+        });
+
+        // Перевірка на абсолютну нічию всіх лідерів
+        let isAbsoluteTie = sortedTeamsGlobal.length > 1 && 
+            (sortedTeamsGlobal[0].score.toFixed(2) === sortedTeamsGlobal[sortedTeamsGlobal.length - 1].score.toFixed(2));
+
+        if (isAbsoluteTie) {
+            document.getElementById('final-title').innerText = "Фінал гри! Нічия між усіма командами!";
+        } else if (sortedTeamsGlobal[1] && sortedTeamsGlobal[0].score.toFixed(2) === sortedTeamsGlobal[1].score.toFixed(2)) {
+            document.getElementById('final-title').innerText = "Фінал гри! Нічия на першому місці!";
+        } else {
+            document.getElementById('final-title').innerText = "Фінал гри! Вітаємо переможців!";
+        }
+
+        // Рендеримо п'єдестал у гарному порядку для візуалізації
         let renderOrder = [];
         if (sortedTeamsGlobal.length === 1) {
             renderOrder = [0];
@@ -730,24 +774,23 @@
             if (sortedTeamsGlobal[2]) positions.push(2); 
             if (sortedTeamsGlobal[3]) positions.push(3); 
             if (sortedTeamsGlobal[4]) positions.push(4); 
-            renderOrder = positions;
+            renderOrder = positions.filter(p => p < sortedTeamsGlobal.length);
         }
 
         renderOrder.forEach(originalIndex => {
             const team = sortedTeamsGlobal[originalIndex];
-            const rank = originalIndex + 1; 
+            const rank = teamRanksMapping[team.name]; 
 
             podiumContainer.innerHTML += `
-                <div class="podium-place place-${rank}">
+                <div class="podium-place place-${Math.min(rank, 5)}">
                     <div class="podium-team-name">${team.name}</div>
-                    <div class="podium-score">${team.score} б.</div>
+                    <div class="podium-score">${team.score.toFixed(2)} б.</div>
                     <div class="podium-block">${rank}</div>
                 </div>
             `;
         });
     }
 
-    // ГЕНЕРАЦІЯ ТА СКАЧУВАННЯ PDF-ЗВІТУ З КОРЕКТНИМ КУРСИВОМ ТА ОБЧИСЛЕННЯМИ
     function downloadGeneralReportPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -758,57 +801,75 @@
         doc.text("ZVIT REZULTATIV INTELEKTUALNOYI HRY", 20, yPos);
         yPos += 10;
         doc.setFontSize(14);
-        doc.text("Scho? De? Koly? - Informatyka 7 Klas (2026)", 20, yPos);
-        yPos += 15;
-
-        // Переможці (перше місце на п'єдесталі)
-        const winningTeamName = sortedTeamsGlobal[0] ? sortedTeamsGlobal[0].name : "N/A";
-        doc.setFontSize(12);
-        doc.text(`PEREMOZHETS: ${winningTeamName}`, 20, yPos);
+        doc.text("Nazva hry: Scho? De? Koly? - Informatyka 7 Klas", 20, yPos);
+        yPos += 8;
+        
+        let currentDate = new Date().toLocaleDateString('uk-UA');
+        doc.text(`Data: ${currentDate}`, 20, yPos);
+        yPos += 8;
+        doc.text(`Kilkist raundiv: ${totalRounds}`, 20, yPos);
         yPos += 10;
+        
         doc.line(20, yPos, 190, yPos);
         yPos += 10;
 
         doc.setFont("Helvetica", "bold");
-        doc.text("Personalna produktyvnist uchasnykiv (1-12 baliv):", 20, yPos);
+        doc.setFontSize(12);
+        doc.text("REZULTATY KOMAND TA REYTYNH (MISCIA):", 20, yPos);
+        yPos += 8;
+
+        doc.setFont("Helvetica", "normal");
+        doc.setFontSize(11);
+        sortedTeamsGlobal.forEach(team => {
+            let rank = teamRanksMapping[team.name];
+            doc.text(`- ${team.name}: ${team.score.toFixed(2)} baliv (Miscia/Rank: ${rank})`, 20, yPos);
+            yPos += 6;
+        });
+
+        yPos += 6;
+        doc.line(20, yPos, 190, yPos);
         yPos += 10;
+
+        doc.setFont("Helvetica", "bold");
+        doc.setFontSize(12);
+        doc.text("PERSONALNA PRODUKTYVNIST UCHASNYKIV (1-12 baliv):", 20, yPos);
+        yPos += 8;
 
         doc.setFont("Helvetica", "normal");
         doc.setFontSize(10);
 
-        // Рендеримо таблицю персональних балів
         teams.forEach(team => {
-            const isWinner = (team.name === winningTeamName);
+            let rank = teamRanksMapping[team.name];
             
+            // Нарахування бонусів: за 1 місце - +3 бали, за 2 місце - +2 бали, за 3 місце - +1 бал
+            let bonusPoints = 0;
+            let bonusStr = "0";
+            if (rank === 1) { bonusPoints = 3; bonusStr = "+3 (1st Place)"; }
+            else if (rank === 2) { bonusPoints = 2; bonusStr = "+2 (2nd Place)"; }
+            else if (rank === 3) { bonusPoints = 1; bonusStr = "+1 (3rd Place)"; }
+
             team.players.forEach(player => {
                 let accuracy = 0;
                 if(player.questionsAsked > 0) {
                     accuracy = (player.correctAnswers / player.questionsAsked) * 100;
                 }
                 
-                // Перерахунок у 12-бальну шкалу на основі відсотка правильності
+                // Базова оцінка від 1 до 12 відповідно до кількості відповідей
                 let baseGrade = Math.round((accuracy / 100) * 12);
-                if (baseGrade < 1 && player.questionsAsked > 0) baseGrade = 1; // мінімальний бал якщо хоч щось робив
+                if (baseGrade < 1 && player.questionsAsked > 0) baseGrade = 1;
                 if (player.correctAnswers === 0) baseGrade = 0;
 
-                // Бонус +1 за перемогу команди
-                let finalGrade = baseGrade;
-                let bonusStr = "0";
-                if (isWinner && player.questionsAsked > 0) {
-                    finalGrade = Math.min(12, baseGrade + 1);
-                    bonusStr = "+1 (Victory)";
-                }
+                let finalGrade = Math.min(12, baseGrade + bonusPoints);
 
-                let lineText = `Grahovec: ${player.name} | Komanda: ${team.name}`;
+                let lineText = `Grahovec: ${player.name} | Komanda: ${team.name} (Rank: ${rank})`;
                 doc.text(lineText, 20, yPos);
                 yPos += 5;
                 
-                let statsText = `  Vidsotok: ${accuracy.toFixed(0)}% | Baza: ${baseGrade}/12 | Bonus: ${bonusStr} | RAZOM: ${finalGrade} b.`;
+                let statsText = `  Vidpovidi: ${player.correctAnswers}/${player.questionsAsked} (${accuracy.toFixed(0)}%) | Baza: ${baseGrade}/12 | Bonus: ${bonusStr} | RAZOM: ${finalGrade} b.`;
                 doc.text(statsText, 20, yPos);
                 
                 yPos += 10;
 
-                // Захист від виходу за межі сторінки PDF
                 if (yPos > 270) {
                     doc.addPage();
                     yPos = 20;
