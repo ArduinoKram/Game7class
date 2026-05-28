@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Що? Де? Коли? — Інформатика 7 клас</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-space: #0b0f19;
+            --panel-bg: rgba(22, 30, 49, 0.85);
+            --accent-gold: #f59e0b;
+            --accent-neon: #10b981;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-space);
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(245, 158, 11, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Елементи керування та форми */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        select, input[type="text"] {
+            background: #1e293b;
+            border: 2px solid #334155;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .team-input-list, .players-input-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+
+        .player-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000;
+            font-weight: 700;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #475569, #334155);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            padding: 12px 20px;
+        }
+
+        /* Ігровий інтерфейс */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .round-indicator {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .diff-easy { background: #065f46; color: #34d399; }
+        .diff-medium { background: #9a3412; color: #fbbf24; }
+        .diff-hard { background: #991b1b; color: #f87171; }
+
+        .current-team-badge {
+            background: #1e293b;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            font-size: 1.1rem;
+        }
+
+        .current-team-badge span {
+            color: var(--accent-neon);
+            font-weight: 700;
+        }
+
+        .question-box {
+            background: #111827;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--accent-gold);
+            text-align: left;
+        }
+
+        .question-topic {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: #1e293b;
+            border: 2px solid #334155;
+            color: white;
+            padding: 20px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #2563eb;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background: var(--accent-neon) !important;
+            border-color: #059669 !important;
+            color: black !important;
+        }
+
+        .option-btn.wrong {
+            background: var(--danger) !important;
+            border-color: #b91c1c !important;
+        }
+
+        /* Табло рахунку під час гри */
+        .scoreboard-inline {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 35px;
+            background: #111827;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .score-pill {
+            background: #1e293b;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            border: 1px solid #334155;
+        }
+
+        .score-pill.active-turn {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Екран фіналу та П'єдестал */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            height: 300px;
+            margin: 40px 0;
+            padding-bottom: 20px;
+            border-bottom: 4px solid #334155;
+        }
+
+        .podium-place {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+            transition: all 0.5s ease;
+        }
+
+        .podium-block {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #000;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+        }
+
+        .podium-team-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .podium-score {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        /* Стилі для місць */
+        .place-1 .podium-block { background: linear-gradient(to top, #b45309, #f59e0b); height: 180px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+        .place-2 .podium-block { background: linear-gradient(to top, #64748b, #cbd5e1); height: 130px; }
+        .place-3 .podium-block { background: linear-gradient(to top, #78350f, #b45309); height: 90px; }
+        .place-4 .podium-block { background: linear-gradient(to top, #1e293b, #475569); height: 60px; color: white; }
+        .place-5 .podium-block { background: linear-gradient(to top, #111827, #334155); height: 40px; color: white; }
+
+        .wishes {
+            font-size: 1.5rem;
+            color: var(--accent-neon);
+            font-weight: 700;
+            margin-top: 30px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Що? Де? Коли?</h1>
+    <div class="subtitle">Інтелектуальна гра з Інформатики | 7 Клас</div>
+
+    <div id="screen-players-setup" class="screen active">
+        <div class="form-group">
+            <label for="teams-count-select">Оберіть кількість команд:</label>
+            <select id="teams-count-select" style="max-width: 200px;">
+                <option value="1">1 команда</option>
+                <option value="2">2 команди</option>
+                <option value="3">3 команди</option>
+                <option value="4">4 команди</option>
+                <option value="5" selected>5 команд</option>
+            </select>
+        </div>
+        
+        <label>Додайте учасників гри:</label>
+        <div id="players-inputs-container" class="players-input-list">
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника"></div>
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника"></div>
+            <div class="player-row"><input type="text" class="player-name-input" placeholder="Ім'я учасника"></div>
+        </div>
+        <button class="btn btn-secondary" onclick="addPlayerField()">+ Додати учасника</button>
+        <br><br>
+        <button class="btn" onclick="distributePlayersAndGoNext()">Розподілити по командах</button>
+    </div>
+
+    <div id="screen-teams-names" class="screen">
+        <label>Згенеровані команди та знавці:</label>
+        <div id="team-inputs-container" class="team-input-list"></div>
+        <button class="btn" onclick="startGame()">Розпочати гру</button>
+    </div>
+
+    <div id="screen-game" class="screen">
+        <div class="game-header">
+            <div>
+                <div id="round-num" class="round-indicator">Раунд 1 із 12</div>
+                <div id="difficulty-indicator" class="difficulty-badge diff-easy">Легкий</div>
+            </div>
+            <div class="current-team-badge">Відповідає: <span id="current-team-display">Команда</span> (<span id="current-player-display">Учень</span>)</div>
+        </div>
+
+        <div class="question-box">
+            <div id="q-topic" class="question-topic">Тема теми</div>
+            <div id="q-text" class="question-text">Текст запитання?</div>
+        </div>
+
+        <div id="options-container" class="options-grid"></div>
+
+        <button id="next-btn" class="btn" style="display: none;" onclick="nextStep()">Наступне запитання</button>
+
+        <div id="scoreboard" class="scoreboard-inline"></div>
+    </div>
+
+    <div id="screen-results" class="screen">
+        <h2>Фінал гри! Вітаємо переможців!</h2>
+        <div id="podium" class="podium-container"></div>
+        <div class="wishes">
+            Успіхів у подальшому вивченні захопливого світу інформатики! <br>🚀 Ви — справжні знавці 2026 року! 🚀
+        </div>
+        <div style="margin-top: 30px;">
+            <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white;" onclick="downloadGeneralReportPDF()">Загальний звіт (PDF)</button>
+            <button class="btn btn-secondary" onclick="location.reload()">Грати знову</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // БАЗА З ЗАПИТАННЯМИ, РОЗДІЛЕНА ЗА РІВНЯМИ СКЛАДНОСТІ (Складність зростає)
+    const questionsDatabase = {
+        easy: [
+            { topic: "Персональний цифровий простір", q: "Що є основою вашого персонального цифрового простору?", a: ["Набір хмарних сервісів, пристроїв та даних", "Лише ваш шкільний щоденник", "Будь-який комп'ютер у кав'ярні"], correct: 0 },
+            { topic: "Правила безпечного користування", q: "Яке правило є найважливішим при завантаженні файлів з інтернету?", a: ["Перевіряти надійність джерела та сканувати антивірусом", "Завантажувати найшвидше", "Дивитися тільки на красиву картинку сайту"], correct: 0 },
+            { topic: "Цифрова безпека. Захист даних", q: "Який пароль вважається найнадійнішим?", a: ["Комбінація літер різних регістрів, цифр і символів", "12345678", "Твоє ім'я та рік народження"], correct: 0 },
+            { topic: "Цифрова безпека. Комп'ютерні віруси", q: "Які програми створені для виявлення та блокування шкідливого софту?", a: ["Мультимедійні програвачі", "Антивіруси", "Браузери"], correct: 1 },
+            { topic: "Сервери та файлові сховища", q: "Яка головна функція файлового сервера?", a: ["Створення презентацій", "Зберігання файлів та забезпечення доступу до них у мережі", "Редагування відеофайлів"], correct: 1 },
+            { topic: "Цифрове середовище та ІТ", q: "Що таке 'хмарні технології'?", a: ["Програми для прогнозу погоди", "Технології обробки даних на віддалених серверах", "Комп'ютери, що працюють високо в горах"], correct: 1 }
+        ],
+        medium: [
+            { topic: "Працюємо онлайн (OneDrive)", q: "До екосистеми якої компанії належить хмарне сховище OneDrive?", a: ["Apple", "Google", "Microsoft"], correct: 2 },
+            { topic: "Працюємо онлайн (Google Диск)", q: "Яку максимальну кількість людей можна додати до редагування одного документа Google?", a: ["Лише 5 людей", "Багатьох користувачів за посиланням або емейлом", "Тільки автора документа"], correct: 1 },
+            { topic: "Цифрове середовище для навчання", q: "Який сервіс найкраще підходить для організації спільної роботи класу над проєктом?", a: ["Калькулятор", "Хмарне середовище (напр., Google Workspace)", "Стандартний Блокнот"], correct: 1 },
+            { topic: "Працюємо онлайн (WhatsApp)", q: "Яка функція в месенджерах забезпечує таємність листування від сторонніх осіб?", a: ["Наскрізне шифрування (End-to-end)", "Додавання стікерів", "Голосові повідомлення"], correct: 0 },
+            { topic: "Візуальний контент", q: "Який формат зображення підтримує прозорість фону?", a: ["JPEG", "PNG", "BMP"], correct: 1 },
+            { topic: "Конструктор вебсайтів", q: "Що таке 'макет сайту'?", a: ["Готовий програмний код", "Схема розташування елементів (заголовок, меню, контент)", "Текст, написаний для головної сторінки"], correct: 1 },
+            { topic: "Конструктор вебсайтів", q: "Чому важливо стискати великі зображення перед завантаженням на сайт?", a: ["Щоб сайт завантажувався швидше", "Щоб картинка стала чорно-білою", "Це необов'язково, конструктор сам усе видалить"], correct: 0 },
+            { topic: "Конструктор вебсайтів", q: "Як називається головне вікно навігації по сторінках сайту?", a: ["Підвал (Footer)", "Меню сайту (Navigation bar)", "Банер"], correct: 1 },
+            { topic: "Публікація вебсайту", q: "Що відбувається після натискання кнопки 'Опублікувати' в конструкторі сайтів?", a: ["Сайт видаляється", "Сайт стає доступним для користувачів в інтернеті", "Сайт зберігається як документ Word"], correct: 1 },
+            { topic: "Як ШІ допомагає у контенті", q: "Що з переліченого є етичним використанням штучного інтелекту?", a: ["Видавати згенерований ШІ текст за власну наукову роботу", "Використовувати ШІ для пошуку ідей та структурування інформації", "Створювати фейкові новини з підробленими фото"], correct: 1 },
+            { topic: "Тексти та публікації", q: "Що таке комп'ютерна публікація?", a: ["Процес видання тексту на папері або в електронному вигляді", "Перегляд відео на YouTube", "Надсилання повідомлення другові"], correct: 0 },
+            { topic: "Вигляд документа та оформлення", q: "Яке головне правило підбору шрифтів для презентації або публікації?", a: ["Використовувати якомога більше різних шрифтів на одному слайді", "Використовувати не більше 2-3 шрифтів, які добре читаються", "Шрифт обов'язково має бути рукописним"], correct: 1 },
+            { topic: "Форматування текстових документів", q: "Для чого використовуються Елементи Стилів (Заголовок 1, 2) в тексті?", a: ["Для автоматичного створення змісту та швидкого форматування", "Тільки для зміни кольору літер", "Для перевірки орфографії"], correct: 0 },
+            { topic: "Злиття текстових документів", q: "Для чого використовують функцію злиття документів (Mail Merge)?", a: ["Для об'єднання кількох баз даних", "Для масового створення персоналізованих листів чи сертифікатів", "Для видалення вірусів з тексту"], correct: 1 },
+            { topic: "Публікації для соціальних мереж", q: "Яке співвідношення сторін є стандартним для контенту типу Stories або Reels?", a: ["4:3", "16:9 (Горизонтальне)", "9:16 (Вертикальне)"], correct: 2 },
+            { topic: "Засоби для перекладу текстів", q: "Яка технологія лежить в основі сучасних якісних онлайн-перекладачів?", a: ["Нейронні мережі", "Простий послівний словник", "Механічний переклад"], correct: 0 }
+        ],
+        hard: [
+            { topic: "Графічне програмування", q: "Яка точка на графічному полотні зазвичай має координати (0,0)?", a: ["Центр екрана", "Лівий верхній кут", "Правий нижній кут"], correct: 1 },
+            { topic: "Графічне програмування", q: "Якщо ми збільшуємо координату Y в комп'ютерній графіці, куди рухається об'єкт?", a: ["Вгору", "Вліво", "Вниз"], correct: 2 },
+            { topic: "Монстри (Програмування)", q: "Як у коді реалізувати випадковий вигляд або колір для малювання робота/монстра?", a: ["Функцією random()", "За допомогою клавіатури", "Колір завжди фіксований"], correct: 0 },
+            { topic: "Абстракціонізм", q: "Які інструменти коду потрібні для відтворення геометричних абстракцій?", a: ["Функції малювання фігур (rect, ellipse, line)", "Лише текстові оператори", "Програми архівації"], correct: 0 },
+            { topic: "Креативне умеблювання кімнати", q: "Який математичний принцип допомагає правильно масштабувати об'єкти на екрані?", a: ["Пропорція", "Додавання одиниці", "Теорема Вієта"], correct: 0 },
+            { topic: "Узори. Ефективне малювання", q: "Яку конструкцію коду доцільно використати для створення узору, що повторюється?", a: ["Умовний оператор if", "Цикл (наприклад, for або while)", "Змінну типу String"], correct: 1 },
+            { topic: "Події в програмуванні", q: "Прикладом якої події є клік по кнопці або натискання клавіші?", a: ["Подія користувача (Event)", "Помилка компілятора", "Оновлення сторінки"], correct: 0 },
+            { topic: "Рухомі м'ячики. Приборкуємо хаос", q: "Що потрібно змінювати в циклі, щоб м'ячик рухався по екрану?", a: ["Колір фону", "Його координати X та Y", "Розмір екрана"], correct: 1 },
+            { topic: "Функціональні перехрестя", q: "Який оператор допомагає перевірити, чи зіштовхнулися два рухомі об'єкти?", a: ["Оператор порівняння в умовному розгалуженні (if)", "Оператор введення", "Функція очищення екрана"], correct: 0 },
+            { topic: "Числа, цифри, фігури", q: "Яка математична константа використовується для розрахунку параметрів кіл та куль?", a: ["Число Пі", "Нуль", "Число Ейлера"], correct: 0 },
+            { topic: "Інноваційне писанкарство", q: "За допомогою чого можна запрограмувати складні симетричні орнаменти?", a: ["Математичних функцій синуса/косинуса та поворотів", "Звичайного копіювання коду 100 разів", "Текстових інструкцій"], correct: 0 },
+            { topic: "Медіа-дизайн", q: "Що таке кодек?", a: ["Програма для стиснення та відновлення відео/аудіо даних", "Відеокамера", "Спеціальний кабель для монітора"], correct: 0 },
+            { topic: "Кодування аудіо та відео даних", q: "Який із перелічених файлів є популярним медіаконтейнером для відео?", a: ["MP3", "MP4", "TXT"], correct: 1 },
+            { topic: "Моушн дизайн", q: "Що є головною особливістю моушн-дизайну?", a: ["Це суто статична графіка", "Це оживлення графіки за допомогою анімації", "Це робота виключно зі звуком"], correct: 1 },
+            { topic: "Відеохостинг", q: "Яка платформа є найпопулярнішим відеохостингом у світі?", a: ["Wikipedia", "YouTube", "Google Пошук"], correct: 1 },
+            { topic: "Власний цифровий відео-образ", q: "Яке правило безпеки є найважливішим при створенні власного блогу чи відео-образу?", a: ["Не публікувати конфіденційні дані (адресу, школу, документи)", "Знімати відео тільки вночі", "Використовувати найдорожчу камеру"], correct: 0 }
+        ]
+    };
+
+    let gameQuestions = [];
+    let teams = [];
+    let allPlayersGlobal = []; // Загальний реєстр учнів для оцінювання
+    let currentQuestionIndex = 0;
+    let currentTeamIndex = 0;
+    let currentAnswersMapping = []; // Мапінг для заплутування кнопок
+    const totalRounds = 12;
+
+    // ДОДАТИ ПОЛЕ ДЛЯ НОВОГО УЧАСНИКА
+    function addPlayerField() {
+        const container = document.getElementById('players-inputs-container');
+        const div = document.createElement('div');
+        div.className = 'player-row';
+        div.innerHTML = `
+            <input type="text" class="player-name-input" placeholder="Ім'я учасника">
+            <button class="btn btn-danger" onclick="this.parentElement.remove()">X</button>
+        `;
+        container.appendChild(div);
+    }
+
+    // РАНДОМАЙЗЕР: РОЗПОДІЛ ПО КОМАНДАХ
+    function distributePlayersAndGoNext() {
+        const inputElements = document.querySelectorAll('.player-name-input');
+        let players = [];
+        
+        inputElements.forEach(input => {
+            let name = input.value.trim();
+            if (name) players.push({ name: name, questionsAsked: 0, correctAnswers: 0 });
+        });
+
+        // Якщо масив пустий, заповнимо авто-іменами для тестування
+        if (players.length === 0) {
+            alert("Будь ласка, введіть хоча б кілька імен учасників!");
+            return;
+        }
+
+        allPlayersGlobal = players; // зберігаємо посилання
+
+        const teamsCount = parseInt(document.getElementById('teams-count-select').value);
+        
+        // Ініціалізуємо команди
+        teams = [];
+        for(let i = 1; i <= teamsCount; i++) {
+            teams.push({ name: `Команда ${i}`, score: 0, players: [], currentPlayerPointer: 0 });
+        }
+
+        // Перемішуємо гравців для випадкового розподілу
+        let shuffledPlayers = [...players].sort(() => 0.5 - Math.random());
+
+        // Розкидаємо по черзі в команди
+        shuffledPlayers.forEach((player, idx) => {
+            let teamIdx = idx % teamsCount;
+            teams[teamIdx].players.push(player);
+        });
+
+        // Очищаємо від команд без гравців (якщо раптом гравців менше ніж команд)
+        teams = teams.filter(t => t.players.length > 0);
+
+        // Генеруємо інтерфейс перегляду та редагування назв команд
+        const container = document.getElementById('team-inputs-container');
+        container.innerHTML = '';
+        teams.forEach((team, idx) => {
+            let playersListStr = team.players.map(p => p.name).join(', ');
+            container.innerHTML += `
+                <div class="form-group" style="width: 100%; max-width: 500px; background: rgba(255,255,255,0.05); padding: 15px; border-radius:12px;">
+                    <input type="text" id="team-name-change-${idx}" value="${team.name}" style="margin-bottom: 8px;">
+                    <div style="font-size: 0.9rem; color: var(--text-muted)">Склад: ${playersListStr}</div>
+                </div>
+            `;
+        });
+
+        switchScreen('screen-teams-names');
+    }
+
+    // СТАРТ ГРИ ТА СТВОРЕННЯ СТРУКТУРИ КУРСУ СКЛАДНОСТІ
+    function startGame() {
+        // Оновлюємо кастомні назви команд, якщо вчитель змінив їх
+        teams.forEach((team, idx) => {
+            const input = document.getElementById(`team-name-change-${idx}`);
+            if (input && input.value.trim()) {
+                team.name = input.value.trim();
+            }
+        });
+
+        // Динамічне зростання складності: 4 легких, 4 середніх, 4 складних запитання
+        const easyShuffled = [...questionsDatabase.easy].sort(() => 0.5 - Math.random()).slice(0, 4);
+        const mediumShuffled = [...questionsDatabase.medium].sort(() => 0.5 - Math.random()).slice(0, 4);
+        const hardShuffled = [...questionsDatabase.hard].sort(() => 0.5 - Math.random()).slice(0, 4);
+        
+        gameQuestions = [...easyShuffled, ...mediumShuffled, ...hardShuffled];
+
+        currentQuestionIndex = 0;
+        currentTeamIndex = 0;
+
+        updateScoreboard();
+        showQuestion();
+        switchScreen('screen-game');
+    }
+
+    // ВІДОБРАЖЕННЯ ЗАПИТАННЯ З РАНДОМІЗАЦІЄЮ КНОПОК
+    function showQuestion() {
+        document.getElementById('next-btn').style.display = 'none';
+        const qData = gameQuestions[currentQuestionIndex];
+        
+        // Візуалізація складності
+        const diffBadge = document.getElementById('difficulty-indicator');
+        if (currentQuestionIndex < 4) {
+            diffBadge.innerText = "Легкий";
+            diffBadge.className = "difficulty-badge diff-easy";
+        } else if (currentQuestionIndex < 8) {
+            diffBadge.innerText = "Середній";
+            diffBadge.className = "difficulty-badge diff-medium";
+        } else {
+            diffBadge.innerText = "Складний";
+            diffBadge.className = "difficulty-badge diff-hard";
+        }
+
+        // Поточна команда та активний гравець
+        const activeTeam = teams[currentTeamIndex];
+        const activePlayer = activeTeam.players[activeTeam.currentPlayerPointer];
+
+        // Трекаємо, що гравцю випало питання
+        activePlayer.questionsAsked += 1;
+
+        document.getElementById('round-num').innerText = `Раунд ${currentQuestionIndex + 1} із ${totalRounds}`;
+        document.getElementById('current-team-display').innerText = activeTeam.name;
+        document.getElementById('current-player-display').innerText = activePlayer.name;
+        document.getElementById('q-topic').innerText = `Тема: ${qData.topic}`;
+        document.getElementById('q-text').innerText = qData.q;
+
+        // Перемішування відповідей для розташування по випадковим кнопкам
+        const originalOptions = qData.a;
+        const correctText = originalOptions[qData.correct];
+        
+        // Створюємо масив індексів [0, 1, 2] і перемішуємо його
+        currentAnswersMapping = originalOptions.map((_, i) => i).sort(() => 0.5 - Math.random());
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        currentAnswersMapping.forEach((originalIdx, buttonIdx) => {
+            optionsContainer.innerHTML += `
+                <button class="option-btn" data-orig-idx="${originalIdx}" onclick="checkAnswer(${originalIdx}, this)">
+                    ${String.fromCharCode(65 + buttonIdx)}) &nbsp; ${originalOptions[originalIdx]}
+                </button>
+            `;
+        });
+
+        highlightCurrentTeamInScoreboard();
+    }
+
+    // ПЕРЕВІРКА ВІДПОВІДІ
+    function checkAnswer(selectedIndex, clickedBtn) {
+        const qData = gameQuestions[currentQuestionIndex];
+        const allButtons = document.querySelectorAll('.option-btn');
+        const activeTeam = teams[currentTeamIndex];
+        const activePlayer = activeTeam.players[activeTeam.currentPlayerPointer];
+
+        allButtons.forEach(btn => btn.disabled = true);
+
+        if (selectedIndex === qData.correct) {
+            clickedBtn.classList.add('correct');
+            activeTeam.score += 1; 
+            activePlayer.correctAnswers += 1; // Зараховуємо персональний бал
+        } else {
+            clickedBtn.classList.add('wrong');
+            // Підсвічуємо правильну кнопку за її оригінальним індексом
+            allButtons.forEach(btn => {
+                if(parseInt(btn.getAttribute('data-orig-idx')) === qData.correct) {
+                    btn.classList.add('correct');
+                }
+            });
+        }
+
+        updateScoreboard();
+        document.getElementById('next-btn').style.display = 'inline-block';
+    }
+
+    // ПЕРЕХІД ДО НАСТУПНОГО КРОКУ
+    function nextStep() {
+        // Пересуваємо покажчик гравця всередині поточної команди на наступного
+        const activeTeam = teams[currentTeamIndex];
+        activeTeam.currentPlayerPointer = (activeTeam.currentPlayerPointer + 1) % activeTeam.players.length;
+
+        currentQuestionIndex++;
+        // Зміна черги команд
+        currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+
+        if (currentQuestionIndex < totalRounds) {
+            showQuestion();
+        } else {
+            showFinalResults();
+        }
+    }
+
+    // ОНОВЛЕННЯ ТАБЛО
+    function updateScoreboard() {
+        const sb = document.getElementById('scoreboard');
+        sb.innerHTML = '';
+        teams.forEach((team, idx) => {
+            sb.innerHTML += `
+                <div class="score-pill" id="score-pill-${idx}">
+                    ${team.name}: <strong>${team.score}</strong>
+                </div>
+            `;
+        });
+    }
+
+    function highlightCurrentTeamInScoreboard() {
+        teams.forEach((_, idx) => {
+            const pill = document.getElementById(`score-pill-${idx}`);
+            if (pill) {
+                if (idx === currentTeamIndex) {
+                    pill.classList.add('active-turn');
+                } else {
+                    pill.classList.remove('active-turn');
+                }
+            }
+        });
+    }
+
+    // ФІНАЛЬНИЙ ЕКРАН П'ЄДЕСТАЛУ
+    let sortedTeamsGlobal = [];
+    function showFinalResults() {
+        switchScreen('screen-results');
+        const podiumContainer = document.getElementById('podium');
+        podiumContainer.innerHTML = '';
+
+        // Сортуємо команди за набраними балами
+        sortedTeamsGlobal = [...teams].sort((a, b) => b.score - a.score);
+
+        let renderOrder = [];
+        if (sortedTeamsGlobal.length === 1) {
+            renderOrder = [0];
+        } else if (sortedTeamsGlobal.length === 2) {
+            renderOrder = [1, 0];
+        } else {
+            const positions = [];
+            if (sortedTeamsGlobal[1]) positions.push(1); 
+            positions.push(0); 
+            if (sortedTeamsGlobal[2]) positions.push(2); 
+            if (sortedTeamsGlobal[3]) positions.push(3); 
+            if (sortedTeamsGlobal[4]) positions.push(4); 
+            renderOrder = positions;
+        }
+
+        renderOrder.forEach(originalIndex => {
+            const team = sortedTeamsGlobal[originalIndex];
+            const rank = originalIndex + 1; 
+
+            podiumContainer.innerHTML += `
+                <div class="podium-place place-${rank}">
+                    <div class="podium-team-name">${team.name}</div>
+                    <div class="podium-score">${team.score} б.</div>
+                    <div class="podium-block">${rank}</div>
+                </div>
+            `;
+        });
+    }
+
+    // ГЕНЕРАЦІЯ ТА СКАЧУВАННЯ PDF-ЗВІТУ З КОРЕКТНИМ КУРСИВОМ ТА ОБЧИСЛЕННЯМИ
+    function downloadGeneralReportPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        let yPos = 20;
+        doc.setFont("Helvetica", "bold");
+        doc.setFontSize(18);
+        doc.text("ZVIT REZULTATIV INTELEKTUALNOYI HRY", 20, yPos);
+        yPos += 10;
+        doc.setFontSize(14);
+        doc.text("Scho? De? Koly? - Informatyka 7 Klas (2026)", 20, yPos);
+        yPos += 15;
+
+        // Переможці (перше місце на п'єдесталі)
+        const winningTeamName = sortedTeamsGlobal[0] ? sortedTeamsGlobal[0].name : "N/A";
+        doc.setFontSize(12);
+        doc.text(`PEREMOZHETS: ${winningTeamName}`, 20, yPos);
+        yPos += 10;
+        doc.line(20, yPos, 190, yPos);
+        yPos += 10;
+
+        doc.setFont("Helvetica", "bold");
+        doc.text("Personalna produktyvnist uchasnykiv (1-12 baliv):", 20, yPos);
+        yPos += 10;
+
+        doc.setFont("Helvetica", "normal");
+        doc.setFontSize(10);
+
+        // Рендеримо таблицю персональних балів
+        teams.forEach(team => {
+            const isWinner = (team.name === winningTeamName);
+            
+            team.players.forEach(player => {
+                let accuracy = 0;
+                if(player.questionsAsked > 0) {
+                    accuracy = (player.correctAnswers / player.questionsAsked) * 100;
+                }
+                
+                // Перерахунок у 12-бальну шкалу на основі відсотка правильності
+                let baseGrade = Math.round((accuracy / 100) * 12);
+                if (baseGrade < 1 && player.questionsAsked > 0) baseGrade = 1; // мінімальний бал якщо хоч щось робив
+                if (player.correctAnswers === 0) baseGrade = 0;
+
+                // Бонус +1 за перемогу команди
+                let finalGrade = baseGrade;
+                let bonusStr = "0";
+                if (isWinner && player.questionsAsked > 0) {
+                    finalGrade = Math.min(12, baseGrade + 1);
+                    bonusStr = "+1 (Victory)";
+                }
+
+                let lineText = `Grahovec: ${player.name} | Komanda: ${team.name}`;
+                doc.text(lineText, 20, yPos);
+                yPos += 5;
+                
+                let statsText = `  Vidsotok: ${accuracy.toFixed(0)}% | Baza: ${baseGrade}/12 | Bonus: ${bonusStr} | RAZOM: ${finalGrade} b.`;
+                doc.text(statsText, 20, yPos);
+                
+                yPos += 10;
+
+                // Захист від виходу за межі сторінки PDF
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+            });
+        });
+
+        doc.save("Zvit_Scho_De_Koly_7_Klas.pdf");
+    }
+
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+</script>
+
+</body>
+</html>
